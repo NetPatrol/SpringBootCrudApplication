@@ -9,6 +9,5 @@ public interface UserRepository{
     List<User> findAll();
     User findById(Long id);
     User findByLogin(String login);
-    void edit(User user);
     void delete(User user);
 }

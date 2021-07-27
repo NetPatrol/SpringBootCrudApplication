@@ -42,11 +42,6 @@ public class UserRepositoryImpl implements UserRepository{
     }
 
     @Override
-    public void edit(User user) {
-        em.persist(em.contains(user) ? user : em.merge(user));
-    }
-
-    @Override
     public void delete(User user) {
         em.remove(em.contains(user) ? user : em.merge(user));
     }

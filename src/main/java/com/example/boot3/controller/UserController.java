@@ -11,6 +11,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @EnableGlobalMethodSecurity(securedEnabled = true)
@@ -26,12 +28,16 @@ public class UserController {
 
     @GetMapping("/")
     public String getHomePage(Model model) {
-        if (login != null) {
-            model.addAttribute("login", login);
-            model.addAttribute("account", userService.findByLogin(login));
-        }
+        List<String> messages = new ArrayList<>();
+        messages.add("Hello!");
+        messages.add("Welcome to Application");
+        messages.add("to continue working, you need to register");
+        model.addAttribute("messages", messages);
+
+        model.addAttribute("user", new User());
         return "index";
     }
+
     @Secured("ROLE_ADMIN")
     @GetMapping("/admin")
     public String adminPage(Principal principal, ModelMap modelMap, Model model) {
@@ -42,6 +48,7 @@ public class UserController {
         model.addAttribute("account", userService.findByLogin(login));
         return "admin";
     }
+
     @Secured("ROLE_USER")
     @GetMapping("/user")
     public String userPage(Principal principal, Model model) {
@@ -51,32 +58,28 @@ public class UserController {
         return "user";
     }
 
-    @Secured("ROLE_ADMIN")
     @RequestMapping(value = "registration", method = RequestMethod.POST)
-    public String registration(@ModelAttribute User user) {
+    public String registration(Principal principal, @ModelAttribute User user) {
         userService.save(user);
-        return "redirect:/admin";
+        if (principal != null) {
+            return "redirect:/admin";
+        } else {
+            return "redirect:/";
+        }
+
     }
 
     @Secured("ROLE_ADMIN")
-    @GetMapping("/edit/{id}")
-    public String editPage(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("login", login);
-        model.addAttribute("user", userService.findById(id));
-        model.addAttribute("account", userService.findByLogin(login));
-        return "edit";
-    }
-
-    @Secured("ROLE_ADMIN")
-    @RequestMapping(value = "edit/{id}", method = RequestMethod.POST)
-    public String edit(@ModelAttribute User user, @RequestParam String role) {
+    @PostMapping("edit")
+    public String edit(@ModelAttribute("user") User user,
+                       @RequestParam String role) {
         userService.edit(user, role);
         return "redirect:/admin";
     }
 
     @Secured("ROLE_ADMIN")
-    @RequestMapping(value = "delete", method = RequestMethod.POST)
-    public String delete(@ModelAttribute User user) {
+    @PostMapping("delete")
+    public String delete(@ModelAttribute("user") User user) {
         userService.delete(user);
         return "redirect:/admin";
     }

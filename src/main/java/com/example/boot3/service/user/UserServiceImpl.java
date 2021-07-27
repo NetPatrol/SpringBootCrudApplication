@@ -56,19 +56,22 @@ public class UserServiceImpl implements UserService{
     @Override
     public void edit(User user, String role) {
         User u = userRepository.findById(user.getId());
-            if (!role.equals("")) {
-                if (role.equals("admin")) {
-                    u.setRoles(set(roleRepository.findById(1L)));
-                } else if (role.equals("user")) {
-                    u.setRoles(set(roleRepository.findById(2L)));
-                }
+        u.setName(user.getName());
+        u.setLastName(user.getLastName());
+        u.setLogin(user.getLogin());
+        if (!user.getPassword().equals("") | !user.getConfirmPassword().equals("")) {
+            if (user.getPassword().equals(user.getConfirmPassword())) {
+                u.setPassword(passwordEncoder(user.getPassword()));
             }
-            if (!user.getPassword().equals("") | !user.getConfirmPassword().equals("")) {
-                if (user.getPassword().equals(user.getConfirmPassword())) {
-                    u.setPassword(passwordEncoder(user.getPassword()));
-                }
-            }
-        userRepository.edit(u);
+        }
+        if (!role.equals("")) {
+            if (role.equals("admin")) {
+               u.setRoles(set(roleRepository.findById(1L)));
+           } else if (role.equals("user")) {
+               u.setRoles(set(roleRepository.findById(2L)));
+           }
+        }
+        userRepository.save(u);
     }
 
     @Override
