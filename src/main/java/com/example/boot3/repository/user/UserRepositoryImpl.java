@@ -1,6 +1,6 @@
 package com.example.boot3.repository.user;
 
-import com.example.boot3.model.User;
+import com.example.boot3.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -17,32 +17,32 @@ public class UserRepositoryImpl implements UserRepository{
     }
 
     @Override
-    public void save(User user) {
-        em.persist(user);
+    public void save(UserEntity user) {
+        em.persist(em.contains(user) ? user : em.merge(user));
     }
 
     @Override
-    public List<User> findAll() {
-        return em.createQuery("select u from User u join fetch u.roles", User.class)
+    public List<UserEntity> findAll() {
+        return em.createQuery("select u from UserEntity u join fetch u.roles", UserEntity.class)
                 .getResultList();
     }
 
     @Override
-    public User findById(Long id) {
-        return em.createQuery("select u from User u join fetch u.roles where u.id = :id", User.class)
+    public UserEntity findById(Long id) {
+        return em.createQuery("select u from UserEntity u join fetch u.roles where u.id = :id", UserEntity.class)
                 .setParameter("id", id)
                 .getSingleResult();
     }
 
     @Override
-    public User findByLogin(String login) {
-        return em.createQuery("select u from User u join fetch u.roles where u.login = :login", User.class)
+    public UserEntity findByLogin(String login) {
+        return em.createQuery("select u from UserEntity u join fetch u.roles where u.login = :login", UserEntity.class)
                 .setParameter("login", login)
                 .getSingleResult();
     }
 
     @Override
-    public void delete(User user) {
+    public void delete(UserEntity user) {
         em.remove(em.contains(user) ? user : em.merge(user));
     }
 

@@ -1,7 +1,7 @@
 package com.example.boot3.repository.role;
 
-import com.example.boot3.model.Role;
+import com.example.boot3.entity.RoleEntity;
 
 public interface RoleRepository {
-    Role findById(Long id);
+    RoleEntity findById(Long id);
 }

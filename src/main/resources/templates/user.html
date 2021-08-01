@@ -6,7 +6,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet"/>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.css" rel="stylesheet"/>
-    <title></title>
+    <title th:text="${account.login}"></title>
 </head>
 <body class="bg-light">
 <nav class="navbar sticky-top navbar-dark bg-dark">
@@ -71,5 +71,21 @@
         </tbody>
     </table>
 </div>
+
+<section class="border p-4 d-flex justify-content-center mb-4">
+    <div class="lightbox" data-id="lightbox-rnm8h78xl">
+        <div class="row">
+            <div class="col-lg-4">
+                <img src="https://mdbcdn.b-cdn.net/img/Photos/Thumbnails/Slides/1.jpg" data-mdb-img="https://mdbcdn.b-cdn.net/img/Photos/Slides/1.jpg" alt="Lightbox image 1" class="w-100 shadow-1-strong rounded">
+            </div>
+            <div class="col-lg-4">
+                <img src="https://mdbcdn.b-cdn.net/img/Photos/Thumbnails/Slides/2.jpg" data-mdb-img="https://mdbcdn.b-cdn.net/img/Photos/Slides/2.jpg" alt="Lightbox image 2" class="w-100 shadow-1-strong rounded">
+            </div>
+            <div class="col-lg-4">
+                <img src="https://mdbcdn.b-cdn.net/img/Photos/Thumbnails/Slides/3.jpg" data-mdb-img="https://mdbcdn.b-cdn.net/img/Photos/Slides/3.jpg" alt="Lightbox image 3" class="w-100 shadow-1-strong rounded">
+            </div>
+        </div>
+    </div>
+</section>
 </body>
 </html>

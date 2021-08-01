@@ -1,10 +1,11 @@
 package com.example.boot3.repository.role;
 
-import com.example.boot3.model.Role;
+import com.example.boot3.entity.RoleEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+
 @Repository
 public class RoleRepositoryImpl implements RoleRepository {
 
@@ -15,8 +16,8 @@ public class RoleRepositoryImpl implements RoleRepository {
     }
 
     @Override
-    public Role findById(Long id) {
-        return em.createQuery("select r from Role r join fetch r.users where r.id = :id", Role.class)
+    public RoleEntity findById(Long id) {
+        return em.createQuery("select r from RoleEntity r where r.id = :id", RoleEntity.class)
                 .setParameter("id", id)
                 .getSingleResult();
     }

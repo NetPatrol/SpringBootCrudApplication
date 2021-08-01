@@ -1,7 +1,7 @@
 package com.example.boot3.service.user;
 
-import com.example.boot3.model.Role;
-import com.example.boot3.model.User;
+import com.example.boot3.entity.RoleEntity;
+import com.example.boot3.entity.UserEntity;
 import com.example.boot3.repository.role.RoleRepository;
 import com.example.boot3.repository.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void save(User user) {
+    public void save(UserEntity user) {
         if (user.getPassword().equals(user.getConfirmPassword())) {
             user.setRoles(set(roleRepository.findById(2L)));
             user.setPassword(passwordEncoder(user.getPassword()));
@@ -39,23 +39,27 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public List<User> findAll() {
+    public List<UserEntity> findAll() {
         return userRepository.findAll();
     }
 
     @Override
-    public User findById(Long id) {
+    public UserEntity findById(Long id) {
         return userRepository.findById(id);
     }
 
     @Override
-    public User findByLogin(String login) {
+    public UserEntity findByLogin(String login) {
         return userRepository.findByLogin(login);
     }
 
     @Override
-    public void edit(User user, String role) {
-        User u = userRepository.findById(user.getId());
+    public void edit(UserEntity user) {
+        UserEntity u = userRepository.findById(user.getId());
+        String role = null;
+        for (RoleEntity r : user.getRoles()) {
+            role = r.getRole();
+        }
         u.setName(user.getName());
         u.setLastName(user.getLastName());
         u.setLogin(user.getLogin());
@@ -75,12 +79,12 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void delete(User user) {
+    public void delete(UserEntity user) {
         userRepository.delete(user);
     }
 
-    public Set<Role> set(Role role) {
-        Set<Role> set = new HashSet<>();
+    public Set<RoleEntity> set(RoleEntity role) {
+        Set<RoleEntity> set = new HashSet<>();
         set.add(role);
         return set;
     }
