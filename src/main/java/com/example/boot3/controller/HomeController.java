@@ -10,7 +10,6 @@ public class HomeController {
 
     @GetMapping("/")
     public String getHomePage(Model model) {
-        model.addAttribute("user", new UserEntity());
         return "index";
     }
 

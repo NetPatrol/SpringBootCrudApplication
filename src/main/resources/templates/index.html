@@ -11,13 +11,11 @@
 <body class="bg-light">
 <nav class="navbar sticky-top navbar-dark bg-dark">
 <div class="container-fluid">
-    <a th:if="${login} == null" th:href="@{/login}" th:text="${'Sign in'}" class="btn btn-primary btn-sm m" role="button"></a>
-    <a th:if="${login} != null" th:href="@{/logout}" th:text="${'Sign out'}" class="btn btn-primary btn-sm m" role="button"></a>
+    <a th:href="@{/login}" class="btn btn-primary btn-sm" role="button">Sign in</a>
     <ul class="navbar-nav flex-row">
-        <li th:if="${login} != null" class="nav-item me-3 me-lg-1 text-white">
+        <li class="nav-item me-3 me-lg-1 text-white">
             <a class="nav-link d-sm-flex align-items-sm-center" href="#">
-                <span class="lead p-1" th:text="${'Welcome, Unknown! You are not authorized'}"></span>
-                <span class="lead p-1" th:text="${#calendars.format(#calendars.createNow(), 'dd MMM yyyy HH:mm')}"></span>
+                <span class="lead p-1">You are not authorized</span>
             </a>
         </li>
     </ul>
