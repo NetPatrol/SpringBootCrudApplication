@@ -24,6 +24,8 @@ public class ArticleEntity {
     @Column(name = "article")
     private String article;
     @Column(name = "date")
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(style = "M-")
     private Date date;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

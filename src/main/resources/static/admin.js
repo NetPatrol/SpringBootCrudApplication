@@ -49,29 +49,6 @@ const getUsers = async function(url) {
         .then(array => renderUserTable(array))
 }
 getUsers('/users').then()
-
-/**
- * Account Data
- **/
-const user = document.getElementById('user')
-const login = document.getElementById('data-account')
-const account = login.value
-const getUserByLogin = async function(login) {
-    let out = `<tr>`
-    const url = '/user/' + login
-    await fetch(url)
-        .then(res => res.json())
-        .then(data => {
-            out += `<td hidden>${data.id}</td>
-                    <td>${data.name}</td>
-                    <td>${data.lastName}</td>
-                    <td>${data.login}</td>`;
-            user.innerHTML = out;
-        })
-}
-
-getUserByLogin(account).then()
-
 /**
 * Registration form
 **/
@@ -155,6 +132,7 @@ document.querySelector('tbody#users').onclick = function (event) {
         document.getElementById('ifEditPassword').style.display = 'none'
         document.getElementById('ifEditConfirmPassword').style.display = 'none'
         document.getElementById('ifEditRole').style.display = 'none'
+        document.getElementById('ifNeedHrLine').style.display = 'none'
         document.getElementById('ifDeleteModal').style.display = 'block'
         document.getElementById('ifNeedDeleteButtonInModal').style.display = 'inline'
         document.getElementById('ifNeedEditButtonInModal').style.display = 'none'
@@ -169,6 +147,7 @@ document.querySelector('tbody#users').onclick = function (event) {
         document.getElementById('ifEditBirthday').style.display = 'flex'
         document.getElementById('ifEditCity').style.display = 'flex'
         document.getElementById('ifEditWorkplace').style.display = 'flex'
+        document.getElementById('ifNeedHrLine').style.display = 'flex'
         document.getElementById('ifEditLogin').style.display = 'flex'
         document.getElementById('ifEditPassword').style.display = 'flex'
         document.getElementById('ifEditConfirmPassword').style.display = 'flex'

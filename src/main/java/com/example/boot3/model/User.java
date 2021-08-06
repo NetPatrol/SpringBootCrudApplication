@@ -17,6 +17,7 @@ public class User{
     private Date birthday;
     private String city;
     private String workplace;
+    private String linkAvatar;
     private String login;
     private boolean locked;
     private List<Article> articles;
@@ -30,6 +31,7 @@ public class User{
         model.setBirthday(entity.getBirthday());
         model.setCity(entity.getCity());
         model.setWorkplace(entity.getWorkplace());
+        model.setLinkAvatar(entity.getLinkAvatar());
         model.setLogin(entity.getLogin());
         model.setRoles(entity.getRoles().stream().map(Role::toModel).collect(Collectors.toList()));
         model.setArticles(entity.getArticles().stream().map(Article::toModel).collect(Collectors.toList()));

@@ -40,6 +40,8 @@ public class UserEntity implements UserDetails {
     private String workplace;
     @Column(name = "login", unique = true)
     private String login;
+    @Column(name = "avatar_link")
+    private String linkAvatar;
     @Column(name = "password")
     private String password;
     @Column(name = "confirm")

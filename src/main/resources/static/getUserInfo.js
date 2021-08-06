@@ -14,37 +14,44 @@ const getUserByLogin = async function(login) {
     await fetch(url)
         .then(res => res.json())
         .then(data => {
-            if (data !== null) {
-                navBarInfo += ``
-            }
             navBarInfo +=
-                `<a href='/logout' class='btn btn-primary btn-sm' role='button'>Sign out</a>
+               `<a href='/logout' class='btn btn-primary btn-sm' role='button'>Sign out</a>
                 <ul class="navbar-nav flex-row">
                     <li class="nav-item me-3 me-lg-1 text-white">
                         <a class="nav-link d-sm-flex align-items-sm-center" href="#">
-                            <img src="https://mdbootstrap.com/img/new/avatars/6.jpg" class="rounded-circle" height="22" alt="" loading="lazy"/>
-                            <span class="p-1"></span>
-                            <span class="p-1">${getDataTime(data.name)}</span>
+                            <img src="${data.linkAvatar}" class="rounded-circle" height="22" alt="" loading="lazy"/>`
+            navBarInfo += `<span class="p-1">${getDataTime(data.name)}</span>`
+            data.roles.forEach(r => {
+                if (r.role === 'ROLE_ADMIN') {
+                    navBarInfo += ` <span class="p-1">статус: администратор</span>
                         </a>
                     </li>
                 </ul>`
+                } else if (r.role === 'ROLE_USER') {
+                    navBarInfo += ` <span class="p-1">статус: пользователь</span>
+                        </a>
+                    </li>
+                </ul>`
+                }
+            })
+
             navBar.innerHTML = navBarInfo
 
             uInfo +=
-                `<div class="col-md-4" >
-                <img src = "https://mdbootstrap.com/img/new/avatars/6.jpg" height = "190" alt = "" loading = "lazy" / >
-            </div>
-            <div class="col-md-6">
-                <div class="card-body">
-                    <h6 class="card-title">${data.name}  ${data.lastName}</h6>
-                        <div class="mt-3">
-                        <p>Date birthday: ${data.birthday}</p>
-                        <p>City: ${data.city}</p>
-                        <p>Workplace: ${data.workplace}</p>
-                    </div>
+               `<div class="col-md-4" >
+                <img src = "${data.linkAvatar}" height = "190" alt = "" loading = "lazy" / >
                 </div>
-            </div>`
-            userInfo.innerHTML = uInfo
+                <div class="col-md-6">
+                    <div class="card-body">
+                        <h6 class="card-title">${data.name}  ${data.lastName}</h6>
+                            <div class="mt-3">
+                            <p>Date birthday: ${data.birthday}</p>
+                            <p>City: ${data.city}</p>
+                            <p>Workplace: ${data.workplace}</p>
+                        </div>
+                    </div>
+                </div>`
+                userInfo.innerHTML = uInfo
 
             data.articles.forEach(a => {
                 article +=
@@ -86,7 +93,6 @@ const getData = function () {
         case 10: fMonth="ноября"; break;
         case 11: fMonth="декабря"; break;
     }
-
     return day +' '+ fMonth +' '+ year
 }
 
@@ -94,16 +100,15 @@ const getDataTime = function (name) {
     let data = new Date()
     const hour = data.getHours()
     if (hour > 4 && hour < 12) {
-        return "Good Morning, "+ name + ", today " + getData()
+        return "Доброе утро, "+ name + ", сегодня " + getData()
     }
     if (hour > 12 && hour < 18) {
-        return "Good afternoon, "+ name + ", today " + getData()
+        return "Добрый день, "+ name + ", сегодня " + getData()
     }
     if (hour > 18 && hour < 23) {
-        return "Good evening, "+ name + ", today " + getData()
+        return "Добрый вечер, "+ name + ", сегодня " + getData()
     }
     if (hour > 18 && hour < 23) {
-        return "Good night, "+ name + ", today " + getData()
+        return "Доброй ночи, "+ name + ", сегодня " + getData()
     }
-
 }
