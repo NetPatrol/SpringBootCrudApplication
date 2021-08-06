@@ -14,6 +14,9 @@ const renderUserTable = (array) => {
                <td hidden>${u.id}</td>
                <td>${u.name}</td>
                <td>${u.lastName}</td>
+               <td>${u.birthday}</td>
+               <td>${u.city}</td>
+               <td>${u.workplace}</td>
                <td>${u.login}</td>`
         u.roles.forEach(r => {
             if (r.role === "ROLE_ADMIN") {
@@ -45,16 +48,15 @@ const getUsers = async function(url) {
         .then(res => res.json())
         .then(array => renderUserTable(array))
 }
-// setInterval(() => {
 getUsers('/users').then()
-// }, 33000)
+
 /**
  * Account Data
  **/
 const user = document.getElementById('user')
 const login = document.getElementById('data-account')
 const account = login.value
-const getUserById = async function(login) {
+const getUserByLogin = async function(login) {
     let out = `<tr>`
     const url = '/user/' + login
     await fetch(url)
@@ -68,7 +70,7 @@ const getUserById = async function(login) {
         })
 }
 
-getUserById(account).then()
+getUserByLogin(account).then()
 
 /**
 * Registration form
@@ -77,6 +79,9 @@ const formRegistration = document.getElementById('registration')
 const nameValueFormRegistrationInput = document.getElementById('create-name')
 const lastValueFormRegistrationInput = document.getElementById('create-last')
 const loginValueFormRegistrationInput = document.getElementById('create-login')
+const birthdayValueFormRegistrationInput = document.getElementById('create-birthday')
+const cityValueFormRegistrationInput = document.getElementById('create-city')
+const workplaceValueFormRegistrationInput = document.getElementById('create-workplace')
 const passwordValueFormRegistrationInput = document.getElementById('create-password')
 const confirmValueFormRegistrationInput = document.getElementById('create-confirm')
 
@@ -85,11 +90,14 @@ formRegistration.addEventListener('submit', e => {
     const url = '/users'
     let data =
         {
-        "name" : nameValueFormRegistrationInput.value,
-        "lastName" : lastValueFormRegistrationInput.value,
-        "login" : loginValueFormRegistrationInput.value,
-        "password" : passwordValueFormRegistrationInput.value,
-        "confirmPassword" : confirmValueFormRegistrationInput.value
+            "name": nameValueFormRegistrationInput.value,
+            "lastName": lastValueFormRegistrationInput.value,
+            "birthday": birthdayValueFormRegistrationInput.value,
+            "city": cityValueFormRegistrationInput.value,
+            "workplace": workplaceValueFormRegistrationInput.value,
+            "login": loginValueFormRegistrationInput.value,
+            "password": passwordValueFormRegistrationInput.value,
+            "confirmPassword": confirmValueFormRegistrationInput.value
         }
     addUser(url, data).then((res) => {
 
@@ -132,11 +140,17 @@ document.querySelector('tbody#users').onclick = function (event) {
     bodyEditModalInput[1].value = text[1]
     bodyEditModalInput[2].value = text[2]
     bodyEditModalInput[3].value = text[3]
+    bodyEditModalInput[4].value = text[4]
+    bodyEditModalInput[5].value = text[5]
+    bodyEditModalInput[6].value = text[6]
     if (event.target.value === 'Delete') {
         document.getElementById('ifNeedHeaderForDeleteModal').style.display = 'flex'
         document.getElementById('ifNeedHeaderEditModal').style.display = 'none'
         document.getElementById('ifEditName').style.display = 'none'
         document.getElementById('ifEditLast').style.display = 'none'
+        document.getElementById('ifEditBirthday').style.display = 'none'
+        document.getElementById('ifEditCity').style.display = 'none'
+        document.getElementById('ifEditWorkplace').style.display = 'none'
         document.getElementById('ifEditLogin').style.display = 'none'
         document.getElementById('ifEditPassword').style.display = 'none'
         document.getElementById('ifEditConfirmPassword').style.display = 'none'
@@ -152,6 +166,9 @@ document.querySelector('tbody#users').onclick = function (event) {
         document.getElementById('ifDeleteModal').style.display = 'none'
         document.getElementById('ifEditName').style.display = 'flex'
         document.getElementById('ifEditLast').style.display = 'flex'
+        document.getElementById('ifEditBirthday').style.display = 'flex'
+        document.getElementById('ifEditCity').style.display = 'flex'
+        document.getElementById('ifEditWorkplace').style.display = 'flex'
         document.getElementById('ifEditLogin').style.display = 'flex'
         document.getElementById('ifEditPassword').style.display = 'flex'
         document.getElementById('ifEditConfirmPassword').style.display = 'flex'
@@ -161,9 +178,6 @@ document.querySelector('tbody#users').onclick = function (event) {
         document.getElementById('ifNeedClearButtonInModal').style.display = 'inline'
     }
     em.show()
-
-
-
 }
 
 function getDataEditFromButton(data) {
@@ -181,9 +195,12 @@ editButtons.onclick = function (ev) {
                 "id": bodyEditModalInput[0].value,
                 "name": bodyEditModalInput[1].value,
                 "lastName": bodyEditModalInput[2].value,
-                "login": bodyEditModalInput[3].value,
-                "password": bodyEditModalInput[4].value,
-                "confirmPassword": bodyEditModalInput[5].value,
+                "birthday": bodyEditModalInput[3].value,
+                "city": bodyEditModalInput[4].value,
+                "workplace": bodyEditModalInput[5].value,
+                "login": bodyEditModalInput[6].value,
+                "password": bodyEditModalInput[7].value,
+                "confirmPassword": bodyEditModalInput[8].value,
                 "roles": [{
                     "id": roleIndex,
                     "role": bodyEditModalSelect.options[roleIndex].value

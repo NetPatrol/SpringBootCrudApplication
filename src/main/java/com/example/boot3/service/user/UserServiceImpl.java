@@ -62,6 +62,9 @@ public class UserServiceImpl implements UserService{
         }
         u.setName(user.getName());
         u.setLastName(user.getLastName());
+        u.setBirthday(user.getBirthday());
+        u.setCity(user.getCity());
+        u.setWorkplace(user.getWorkplace());
         u.setLogin(user.getLogin());
         if (!user.getPassword().equals("") | !user.getConfirmPassword().equals("")) {
             if (user.getPassword().equals(user.getConfirmPassword())) {

@@ -6,86 +6,22 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet"/>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.css" rel="stylesheet"/>
-    <title th:text="${account.login}"></title>
+    <title th:text="${login}"></title>
 </head>
 <body class="bg-light">
 <nav class="navbar sticky-top navbar-dark bg-dark">
-    <div class="container-fluid">
-        <a th:if="${login} == null" th:href="@{/login}" th:text="${'Sign in'}" class="btn btn-primary btn-sm m" role="button"></a>
-        <a th:if="${login} != null" th:href="@{/logout}" th:text="${'Sign out'}" class="btn btn-primary btn-sm m" role="button"></a>
-        <ul class="navbar-nav flex-row">
-            <li th:if="${login} != null" class="nav-item me-3 me-lg-1 text-white">
-                <a class="nav-link d-sm-flex align-items-sm-center" href="#">
-                    <img src="https://mdbootstrap.com/img/new/avatars/1.jpg" class="rounded-circle" height="22" alt="" loading="lazy"/>
-                    <strong class="d-none d-sm-block ms-1" th:each="role: ${account.roles}" th:switch="${role.role}">
-                        <span class="p-1" th:case="'ROLE_ADMIN'" th:text="${account.name +' status: administrator'}"></span>
-                        <span class="p-1" th:case="'ROLE_USER'" th:text="${account.name}"></span>
-                        <span class="p-1" th:case="''" th:text="${'Welcome, Unknown! You are not authorized'}"></span>
-                        <span class="p-1" th:text="${#calendars.format(#calendars.createNow(), 'dd MMM yyyy HH:mm')}"></span>
-                    </strong>
-                </a>
-            </li>
-        </ul>
-    </div>
+    <input th:value="${login}" hidden id="data-account"/>
+    <div id="navbar" class="container-fluid"></div>
 </nav>
-<div class="col-md-8 offset-md-2 mt-5">
-    <h1 class="display-6" th:text="${account.name} + ' ' + ${account.lastName}"></h1>
-    <table class="table table-sm table-hover">
-        <thead class="table-dark">
-        <tr>
-            <th hidden>Id</th>
-            <th>Name</th>
-            <th>Last name</th>
-            <th>Login</th>
-            <th>Authorities</th>
-            <th>Expired</th>
-            <th class="text-center">Locked</th>
-            <th class="text-center">Credentials</th>
-            <th class="text-center">Enabled</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td th:text="${account.id}" hidden>User ID</td>
-            <td th:text="${account.name}">Name</td>
-            <td th:text="${account.lastName}">Last name</td>
-            <td th:text="${account.login}">Last name</td>
-            <td class="text-center" th:each="role : ${account.roles}" th:switch="${role.role}">
-                <span th:case="'ROLE_ADMIN'"><i class="fas fa-user-cog"></i></span>
-                <span th:case="'ROLE_USER'"><i class="fas fa-user-tie"></i></span>
-            </td>
-            <td th:text="${account.expired}">Last name</td>
-            <td class="text-center" th:switch="${account.locked}">
-                <span th:case="true"><i class="fas fa-unlock-alt"></i></span>
-                <span th:case="false"><i class="fas fa-user-lock"></i></span>
-            </td>
-            <td class="text-center" th:switch="${account.credentials}">
-                <span th:case="true"><i class="fas fa-toggle-on"></i></span>
-                <span th:case="false"><i class="fas fa-toggle-off"></i></span>
-            </td>
-            <td class="text-center" th:switch="${account.enabled}">
-                <span th:case="true"><i class="far fa-check-circle"></i></span>
-                <span th:case="false"><i class="fas fa-ban"></i></span>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
-
-<section class="border p-4 d-flex justify-content-center mb-4">
-    <div class="lightbox" data-id="lightbox-rnm8h78xl">
-        <div class="row">
-            <div class="col-lg-4">
-                <img src="https://mdbcdn.b-cdn.net/img/Photos/Thumbnails/Slides/1.jpg" data-mdb-img="https://mdbcdn.b-cdn.net/img/Photos/Slides/1.jpg" alt="Lightbox image 1" class="w-100 shadow-1-strong rounded">
-            </div>
-            <div class="col-lg-4">
-                <img src="https://mdbcdn.b-cdn.net/img/Photos/Thumbnails/Slides/2.jpg" data-mdb-img="https://mdbcdn.b-cdn.net/img/Photos/Slides/2.jpg" alt="Lightbox image 2" class="w-100 shadow-1-strong rounded">
-            </div>
-            <div class="col-lg-4">
-                <img src="https://mdbcdn.b-cdn.net/img/Photos/Thumbnails/Slides/3.jpg" data-mdb-img="https://mdbcdn.b-cdn.net/img/Photos/Slides/3.jpg" alt="Lightbox image 3" class="w-100 shadow-1-strong rounded">
-            </div>
-        </div>
+<div class="col-md-6 offset-md-3 my-5">
+    <div class="card mb-3">
+        <div id="user-info" class="row g-0"></div>
     </div>
-</section>
+</div>
+<div id="articles" class="col-md-6 offset-md-3 my-5"></div>
+
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.js"></script>
+<script src="getUserInfo.js" type="text/javascript"></script>
 </body>
 </html>

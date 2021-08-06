@@ -68,6 +68,9 @@
                   <th hidden>Id</th>
                   <th>Name</th>
                   <th>Last name</th>
+                  <th>Birthday</th>
+                  <th>City</th>
+                  <th>Workplace</th>
                   <th>Login</th>
                   <th>Authorities</th>
                   <th>Locked</th>
@@ -88,17 +91,38 @@
                 <div class="form-group row">
                   <label class="col-sm-4 col-form-label" for="create-name">Name: </label>
                   <div class="col-sm-8">
-                    <input class="form-control" id="create-name" name="create-name" type="text" placeholder="">
+                    <input type="text" class="form-control" id="create-name" name="create-name">
                   </div>
                 </div>
 
                 <div class="form-group row">
                   <label class="col-sm-4 col-form-label" for="create-last">Last name:</label>
                   <div class="col-sm-8">
-                    <input class="form-control" id="create-last" name="create-last" type="text">
+                    <input type="text" class="form-control" id="create-last" name="create-last">
                   </div>
                 </div>
 
+                <div class="form-group row">
+                  <label class="col-sm-4 col-form-label" for="create-birthday">Birthday:</label>
+                  <div class="col-sm-8">
+                    <input type="date" class="form-control" id="create-birthday" name="create-birthday">
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-sm-4 col-form-label" for="create-city">City:</label>
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control" id="create-city" name="create-city">
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-sm-4 col-form-label" for="create-workplace">Workplace:</label>
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control" id="create-workplace" name="create-workplace">
+                  </div>
+                </div>
+                <hr>
                 <div class="form-group row">
                   <label class="col-sm-4 col-form-label" for="create-login">Login:</label>
                   <div class="col-sm-8">
@@ -250,6 +274,29 @@
               <input class="form-control" id="edit-last" type="text" data-last>
             </div>
           </div>
+
+          <div id="ifEditBirthday" class="form-group row mt-3">
+            <label class="col-sm-4 col-form-label" for="edit-birthday">Birthday:</label>
+            <div class="col-sm-8">
+              <input type="email" class="form-control" id="edit-birthday" data-birthday>
+            </div>
+          </div>
+
+          <div id="ifEditCity" class="form-group row mt-3">
+            <label class="col-sm-4 col-form-label" for="edit-city">City:</label>
+            <div class="col-sm-8">
+              <input type="email" class="form-control" id="edit-city" data-city>
+            </div>
+          </div>
+
+          <div id="ifEditWorkplace" class="form-group row mt-3">
+            <label class="col-sm-4 col-form-label" for="edit-workplace">Workplace:</label>
+            <div class="col-sm-8">
+              <input type="email" class="form-control" id="edit-workplace" data-workplace>
+            </div>
+          </div>
+
+          <hr>
 
           <div id="ifEditLogin" class="form-group row mt-3">
             <label class="col-sm-4 col-form-label" for="edit-login">Login:</label>

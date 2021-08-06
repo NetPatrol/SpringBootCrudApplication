@@ -1,16 +1,10 @@
 package com.example.boot3.model;
 
 import com.example.boot3.entity.RoleEntity;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import org.springframework.security.core.GrantedAuthority;
 
-
-
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 public class Role{
 
