@@ -11,61 +11,48 @@
 <body class="bg-light">
 <nav class="navbar sticky-top navbar-dark bg-dark">
     <div class="container-fluid">
-        <a th:if="${login} == null" th:href="@{/login}" th:text="${'Sign in'}" class="btn btn-primary btn-sm m" role="button"></a>
         <a th:if="${login} != null" th:href="@{/logout}" th:text="${'Sign out'}" class="btn btn-primary btn-sm m" role="button"></a>
         <ul class="navbar-nav flex-row">
-            <li th:if="${login} != null" class="nav-item me-3 me-lg-1 text-white">
-                <a class="nav-link d-sm-flex align-items-sm-center" href="#">
-                    <img src="https://mdbootstrap.com/img/new/avatars/1.jpg" class="rounded-circle" height="22" alt="" loading="lazy"/>
-                    <strong class="d-none d-sm-block ms-1" th:each="role: ${account.roles}" th:switch="${role.role}">
-                        <span class="p-1" th:case="'ROLE_ADMIN'" th:text="${account.name +' status: administrator'}"></span>
-                        <span class="p-1" th:case="'ROLE_USER'" th:text="${account.name}"></span>
-                        <span class="p-1" th:case="''" th:text="${'Welcome, Unknown! You are not authorized'}"></span>
-                        <span class="p-1" th:text="${#calendars.format(#calendars.createNow(), 'dd MMM yyyy HH:mm')}"></span>
-                    </strong>
+            <strong class="d-none d-sm-block ms-1" th:each="role: ${account.roles}" th:switch="${role.role}">
+            <li th:case="'ROLE_ADMIN'" class="nav-item me-3 me-lg-1 text-white">
+                <a class="nav-link d-sm-flex align-items-sm-center" th:href="@{'/user/{login}'(login=${login})}">
+                    <span class="p-1" th:text="${account.name +' status: administrator'}"></span>
+                    <span class="p-1" th:text="${#calendars.format(#calendars.createNow(), 'dd MMM yyyy HH:mm')}"></span>
                 </a>
             </li>
+            <li th:case="'ROLE_USER'" class="nav-item me-3 me-lg-1 text-white">
+                <a class="nav-link d-sm-flex align-items-sm-center" th:href="@{'/user/{login}'(login=${login})}">
+                    <span class="p-1" th:text="${account.name}"></span>
+                    <span class="p-1" th:text="${#calendars.format(#calendars.createNow(), 'dd MMM yyyy HH:mm')}"></span>
+                </a>
+            </li>
+            </strong>
         </ul>
     </div>
 </nav>
-<div class="col-md-8 offset-md-2 mt-5">
-    <h1 class="display-6" th:text="${account.name} + ' ' + ${account.lastName}"></h1>
-    <table class="table table-sm table-hover">
+<div class="col-md-6 offset-md-3 mt-5">
+    <h1 class="display-6" th:text="${user.name} + ' ' + ${user.lastName}"></h1>
+    <table class="table table-sm table-hover" th:each="role: ${user.roles}">
         <thead class="table-dark">
         <tr>
-            <th hidden>Id</th>
-            <th>Name</th>
+            <th>Id</th>
+            <th>First name</th>
             <th>Last name</th>
+            <th>Age</th>
             <th>Login</th>
-            <th>Authorities</th>
-            <th>Expired</th>
-            <th class="text-center">Locked</th>
-            <th class="text-center">Credentials</th>
-            <th class="text-center">Enabled</th>
+            <th class="text-center">Roles</th>
         </tr>
         </thead>
         <tbody>
         <tr>
-            <td th:text="${account.id}" hidden>User ID</td>
-            <td th:text="${account.name}">Name</td>
-            <td th:text="${account.lastName}">Last name</td>
-            <td th:text="${account.login}">Last name</td>
-            <td class="text-center" th:each="role : ${account.roles}" th:switch="${role.role}">
-                <span th:case="'ROLE_ADMIN'"><i class="fas fa-user-cog"></i></span>
-                <span th:case="'ROLE_USER'"><i class="fas fa-user-tie"></i></span>
-            </td>
-            <td th:text="${account.expired}">Last name</td>
-            <td class="text-center" th:switch="${account.locked}">
-                <span th:case="true"><i class="fas fa-unlock-alt"></i></span>
-                <span th:case="false"><i class="fas fa-user-lock"></i></span>
-            </td>
-            <td class="text-center" th:switch="${account.credentials}">
-                <span th:case="true"><i class="fas fa-toggle-on"></i></span>
-                <span th:case="false"><i class="fas fa-toggle-off"></i></span>
-            </td>
-            <td class="text-center" th:switch="${account.enabled}">
-                <span th:case="true"><i class="far fa-check-circle"></i></span>
-                <span th:case="false"><i class="fas fa-ban"></i></span>
+            <td th:text="${user.id}">User ID</td>
+            <td th:text="${user.name}">Name</td>
+            <td th:text="${user.lastName}">Last name</td>
+            <td th:text="${user.age}">Age</td>
+            <td th:text="${user.login}">Login</td>
+            <td class="text-center">
+                <a th:if="${role.role} == 'ROLE_ADMIN'" th:href="@{/admin}" class="btn btn-primary btn-sm">admin panel</a>
+                <span th:if="${role.role} == 'ROLE_USER'">USER</span>
             </td>
         </tr>
         </tbody>

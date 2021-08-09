@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+
 @Repository
 public class RoleRepositoryImpl implements RoleRepository {
 
@@ -15,8 +16,13 @@ public class RoleRepositoryImpl implements RoleRepository {
     }
 
     @Override
+    public void save(Role role) {
+        em.persist(em.contains(role) ? role : em.merge(role));
+    }
+
+    @Override
     public Role findById(Long id) {
-        return em.createQuery("select r from Role r join fetch r.users where r.id = :id", Role.class)
+        return em.createQuery("select r from Role r where r.id = :id", Role.class)
                 .setParameter("id", id)
                 .getSingleResult();
     }

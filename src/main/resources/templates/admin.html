@@ -11,18 +11,12 @@
 <body class="bg-light">
 <nav class="navbar sticky-top navbar-dark bg-dark">
   <div class="container-fluid">
-    <a th:if="${login} == null" th:href="@{/login}" th:text="${'Sign in'}" class="btn btn-primary btn-sm m" role="button"></a>
     <a th:if="${login} != null" th:href="@{/logout}" th:text="${'Sign out'}" class="btn btn-primary btn-sm m" role="button"></a>
     <ul class="navbar-nav flex-row">
-      <li th:if="${login} != null" class="nav-item me-3 me-lg-1 text-white">
-        <a class="nav-link d-sm-flex align-items-sm-center" href="#">
-          <img src="https://mdbootstrap.com/img/new/avatars/8.jpg" class="rounded-circle" height="22" alt="" loading="lazy"/>
-          <strong class="d-none d-sm-block ms-1" th:each="r: ${account.roles}" th:switch="${r.role}">
-            <span class="p-1" th:case="'ROLE_ADMIN'" th:text="${account.name +' status: administrator'}"></span>
-            <span class="p-1" th:case="'ROLE_USER'" th:text="${account.name}"></span>
-            <span class="p-1" th:case="''" th:text="${'Welcome, Unknown! You are not authorized'}"></span>
-            <span class="p-1" th:text="${#calendars.format(#calendars.createNow(), 'dd MMM yyyy HH:mm')}"></span>
-          </strong>
+      <li class="nav-item me-3 me-lg-1 text-white">
+        <a class="nav-link d-sm-flex align-items-sm-center" th:each="role: ${account.roles}" th:switch="${role.role}" th:href="@{'/user/{login}'(login=${login})}">
+          <span class="p-1" th:text="${account.name +' status: administrator'}"></span>
+          <span class="p-1" th:text="${#calendars.format(#calendars.createNow(), 'dd MMM yyyy HH:mm')}"></span>
         </a>
       </li>
     </ul>
@@ -43,60 +37,46 @@
     <div class="tab-content" id="v-tabs-tabContent">
       <div class="tab-pane fade show active" id="v-tabs-home" role="tabpanel" aria-labelledby="v-tabs-home-tab">
         <div class="col-md-12">
-          <h1 class="display-6 mt-3">Administration panel</h1>
+          <h1 class="display-6 mt-3">Admin panel</h1>
           <ul class="nav nav-tabs mb-3" id="myTab0" role="tablist">
             <li class="nav-item" role="presentation">
               <button class="nav-link active" id="home-tab0" data-mdb-toggle="tab" data-mdb-target="#home0" type="button" role="tab" aria-controls="home" aria-selected="true">
-                Accounts table
+                Users table
               </button>
             </li>
             <li class="nav-item" role="presentation">
               <button class="nav-link" id="profile-tab0" data-mdb-toggle="tab" data-mdb-target="#profile0" type="button" role="tab" aria-controls="profile" aria-selected="false">
-                Add new user
+                New user
               </button>
             </li>
           </ul>
           <div class="tab-content" id="myTabContent0">
             <div class="tab-pane fade show active" id="home0" role="tabpanel" aria-labelledby="home-tab0">
-              <div class="mt-5">
+              <div class="col-md-8 offset-md-2 mt-5">
                 <table class="table table-sm table-hover">
                   <thead class="table-dark">
                     <tr>
-                      <th hidden>Id</th>
-                      <th>Name</th>
+                      <th>ID</th>
+                      <th>First name</th>
                       <th>Last name</th>
+                      <th>Age</th>
                       <th>Login</th>
-                      <th class="text-center">Authorities</th>
-                      <th class="text-center">Expired</th>
-                      <th class="text-center">Locked</th>
-                      <th class="text-center">Credentials</th>
-                      <th class="text-center">Enabled</th>
+                      <th class="text-center">Role</th>
                       <th class="text-center">Edit</th>
                       <th class="text-center">Delete</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr th:each="user : ${users}">
-                      <td th:text="${user.id}" hidden></td>
+                      <td th:text="${user.id}"></td>
                       <td th:text="${user.name}"></td>
                       <td th:text="${user.lastName}"></td>
+                      <td th:text="${user.age}"></td>
                       <td th:text="${user.login}"></td>
                       <td class="text-center" th:each="role : ${user.roles}" th:switch="${role.role}">
-                        <span th:case="'ROLE_ADMIN'"><i class="fas fa-user-cog"></i></span>
-                        <span th:case="'ROLE_USER'"><i class="fas fa-user-tie"></i></span>
+                        <a class="btn btn-primary btn-sm align-items-sm-center" th:case="'ROLE_ADMIN'" th:href="@{'/user/{login}'(login=${user.login})}">ADMIN</a>
+                        <a class="btn btn-primary btn-sm align-items-sm-center" th:case="'ROLE_USER'" th:href="@{'/user/{login}'(login=${user.login})}">USER</a>
                       </td>
-                      <td th:text="${user.expired}">Last name</td>
-                      <td class="text-center" th:switch="${user.locked}">
-                        <span th:case="true"><i class="fas fa-unlock-alt"></i></span>
-                        <span th:case="false"><i class="fas fa-user-lock"></i></span>
-                      </td>
-                      <td class="text-center" th:switch="${user.credentials}">
-                        <span th:case="true"><i class="fas fa-toggle-on"></i></span>
-                        <span th:case="false"><i class="fas fa-toggle-off"></i></span>
-                      </td>
-                      <td class="text-center" th:switch="${user.enabled}">
-                        <span th:case="true"><i class="far fa-check-circle"></i></span>
-                        <span th:case="false"><i class="fas fa-ban"></i></span></td>
                       <td class="text-center">
                         <button type="button"
                                 class="btn btn-primary btn-sm"
@@ -107,7 +87,8 @@
                                 th:data-mdb-userLast="${user.lastName}"
                                 th:data-mdb-userLogin="${user.login}"
                                 th:data-mdb-userPassword="${user.password}"
-                                th:data-mdb-userConfirmPassword="${user.confirmPassword}">edit
+                                th:data-mdb-userConfirmPassword="${user.confirmPassword}"
+                                th:data-mdb-userAge="${user.age}">edit
                         </button>
                         <div class="modal fade" id="exampleModal" data-mdb-backdrop="static"
                              data-mdb-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -127,7 +108,7 @@
                                   </div>
 
                                   <div class="form-group row mt-3">
-                                    <label class="col-sm-4 col-form-label" for="edit-name">Name:</label>
+                                    <label class="col-sm-4 col-form-label" for="edit-name">First name:</label>
                                     <div class="col-sm-8">
                                       <input class="form-control" id="edit-name" type="text" data-name th:field="*{name}">
                                     </div>
@@ -137,6 +118,13 @@
                                     <label class="col-sm-4 col-form-label" for="edit-last">Last name:</label>
                                     <div class="col-sm-8">
                                       <input class="form-control" id="edit-last" type="text" data-last th:field="*{lastName}">
+                                    </div>
+                                  </div>
+
+                                  <div class="form-group row mt-3">
+                                    <label class="col-sm-4 col-form-label" for="edit-age">Last name:</label>
+                                    <div class="col-sm-8">
+                                      <input class="form-control" id="edit-age" type="number" data-age th:field="*{age}">
                                     </div>
                                   </div>
 
@@ -209,7 +197,7 @@
                                   </div>
 
                                   <div hidden class="form-group row mt-3" >
-                                    <label class="col-sm-4 col-form-label" for="delete-name">Name:</label>
+                                    <label class="col-sm-4 col-form-label" for="delete-name">First name:</label>
                                     <div class="col-sm-8">
                                       <input class="form-control" id="delete-name" type="text" disabled data-name th:field="*{name}">
                                     </div>
@@ -242,13 +230,14 @@
               </div>
             </div>
             <div class="tab-pane fade" id="profile0" role="tabpanel" aria-labelledby="profile-tab0">
-              <div class="col-md-4 offset-md-4 my-5">
-                <h1 class="display-6">Create new profile</h1>
-              </div>
-              <div class="col-md-4 offset-md-4">
+              <div class="col-md-4 offset-md-4 my-5 shadow-2-strong">
+                <div class="modal-header mb-5">
+                  <h5 class="modal-title text-dark">REGISTRATION</h5>
+                </div>
+              <div class="col-md-9 offset-md-1">
                 <form th:method="POST" th:action="@{registration}" th:id="registration">
                   <div class="form-group row">
-                    <label class="col-sm-4 col-form-label" for="name">Name: </label>
+                    <label class="col-sm-4 col-form-label" for="name">First name: </label>
                     <div class="col-sm-8">
                       <input class="form-control" id="name" type="text" th:field="*{user.name}">
                     </div>
@@ -258,6 +247,13 @@
                     <label class="col-sm-4 col-form-label" for="last">Last name:</label>
                     <div class="col-sm-8">
                       <input class="form-control" id="last" type="text" th:field="*{user.lastName}">
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <label class="col-sm-4 col-form-label" for="age">Age:</label>
+                    <div class="col-sm-8">
+                      <input class="form-control" id="age" type="number" th:field="*{user.age}">
                     </div>
                   </div>
 
@@ -281,63 +277,39 @@
                       <input type="password" class="form-control" id="confirm" th:field="*{user.confirmPassword}">
                     </div>
                   </div>
-                  <div class="modal-footer mt-5">
-                    <table>
-                      <tr>
-                        <td class="p-3">
-                          <button type="reset" class="btn btn-primary" th:form="registration">Clean</button>
-                        </td>
-                        <td>
-                          <button class="btn btn-primary" type="submit" th:form="registration">Registration</button>
-                        </td>
-                      </tr>
-                    </table>
-                  </div>
                 </form>
+              </div>
+              <div class="modal-footer mt-5">
+                <button type="reset" class="btn btn-primary" th:form="registration">Clean</button>
+                <button class="btn btn-primary" type="submit" th:form="registration">Registration</button>
+              </div>
               </div>
             </div>
           </div>
         </div>
       </div>
       <div class="tab-pane fade" id="v-tabs-admin-panel" role="tabpanel" aria-labelledby="v-tabs-admin-panel-tab">
-        <div class="col-md-8 offset-md-2 mt-5">
+        <div class="col-md-6 offset-md-3 mt-5">
           <h1 class="display-6" th:text="${account.name} + ' ' + ${account.lastName}"></h1>
           <table class="table table-sm table-hover">
             <thead class="table-dark">
               <tr>
-                <th hidden>Id</th>
-                <th>Name</th>
+                <th>ID</th>
+                <th>First name</th>
                 <th>Last name</th>
+                <th>Age</th>
                 <th>Login</th>
-                <th>Authorities</th>
-                <th>Expired</th>
-                <th class="text-center">Locked</th>
-                <th class="text-center">Credentials</th>
-                <th class="text-center">Enabled</th>
+                <th class="text-center">Admin panel</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td th:text="${account.id}" hidden></td>
+                <td th:text="${account.id}"></td>
                 <td th:text="${account.name}"></td>
                 <td th:text="${account.lastName}"></td>
+                <td th:text="${account.age}"></td>
                 <td th:text="${account.login}"></td>
-                <td class="text-center" th:each="role : ${account.roles}" th:switch="${role.role}">
-                  <span th:case="'ROLE_ADMIN'"><i class="fas fa-user-cog"></i></span>
-                  <span th:case="'ROLE_USER'"><i class="fas fa-user-tie"></i></span>
-                </td>
-                <td th:text="${account.expired}"></td>
-                <td class="text-center" th:switch="${account.locked}">
-                  <span th:case="true"><i class="fas fa-unlock-alt"></i></span>
-                  <span th:case="false"><i class="fas fa-user-lock"></i></span>
-                </td>
-                <td class="text-center" th:switch="${account.credentials}">
-                  <span th:case="true"><i class="fas fa-toggle-on"></i></span>
-                  <span th:case="false"><i class="fas fa-toggle-off"></i></span>
-                </td>
-                <td class="text-center" th:switch="${account.enabled}">
-                  <span th:case="true"><i class="far fa-check-circle"></i></span>
-                  <span th:case="false"><i class="fas fa-ban"></i></span>
+                <td class="text-center"><a th:href="@{/admin}" class="btn btn-primary btn-sm">admin panel</a></td>
                 </td>
               </tr>
             </tbody>
@@ -349,51 +321,6 @@
 </div>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.js"></script>
-<script>
-  const exampleModal = document.getElementById('exampleModal');
-  exampleModal.addEventListener('show.mdb.modal', function (event) {
-
-    const button = event.relatedTarget;
-
-    const userId = button.getAttribute('data-mdb-userId');
-    const userName = button.getAttribute('data-mdb-userName');
-    const userLast = button.getAttribute('data-mdb-userLast');
-    const userLogin = button.getAttribute('data-mdb-userLogin');
-
-    const modalTitle = exampleModal.querySelector('.modal-title');
-    const modalBodyInputId = exampleModal.querySelector('[data-id]');
-    const modalBodyInputName = exampleModal.querySelector('[data-name]');
-    const modalBodyInputLast = exampleModal.querySelector('[data-last]');
-    const modalBodyInputLogin = exampleModal.querySelector('[data-login]');
-
-    modalTitle.textContent = 'Edit profile from ' + userLast + ' ' + userName
-    modalBodyInputId.value = userId
-    modalBodyInputName.value = userName
-    modalBodyInputLast.value = userLast
-    modalBodyInputLogin.value = userLogin
-  })
-</script>
-
-<script>
-  const deleteModal = document.getElementById('deleteModal');
-  deleteModal.addEventListener('show.mdb.modal', function (event) {
-
-    const buttonDelete = event.relatedTarget;
-
-    const userId = buttonDelete.getAttribute('data-mdb-userId');
-    const userName = buttonDelete.getAttribute('data-mdb-userName');
-    const userLast = buttonDelete.getAttribute('data-mdb-userLast');
-
-    const deleteTitle = deleteModal.querySelector('[delete-title]');
-    const deleteBodyId = deleteModal.querySelector('[data-id]');
-    const deleteBodyName = deleteModal.querySelector('[data-name]');
-    const deleteBodyLast = deleteModal.querySelector('[data-last]');
-
-    deleteTitle.textContent = 'Delete user ' + userLast + ' ' + userName + '?'
-    deleteBodyId.value = userId
-    deleteBodyName.value = userName
-    deleteBodyLast.value = userLast
-  })
-</script>
+<script src="script.js" type="text/javascript"></script>
 </body>
 </html>

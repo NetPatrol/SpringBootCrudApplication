@@ -33,7 +33,6 @@ public class UserController {
         messages.add("Welcome to Application");
         messages.add("to continue working, you need to register");
         model.addAttribute("messages", messages);
-
         model.addAttribute("user", new User());
         return "index";
     }
@@ -49,11 +48,12 @@ public class UserController {
         return "admin";
     }
 
-    @Secured("ROLE_USER")
-    @GetMapping("/user")
-    public String userPage(Principal principal, Model model) {
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
+    @GetMapping("/user/{login}")
+    public String userPageById(@PathVariable("login") String log, Principal principal, Model model) {
         this.login = principal.getName();
         model.addAttribute("login", login);
+        model.addAttribute("user", userService.findByLogin(log));
         model.addAttribute("account", userService.findByLogin(login));
         return "user";
     }
@@ -66,7 +66,6 @@ public class UserController {
         } else {
             return "redirect:/";
         }
-
     }
 
     @Secured("ROLE_ADMIN")
