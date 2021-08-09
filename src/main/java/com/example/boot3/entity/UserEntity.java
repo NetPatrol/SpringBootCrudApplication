@@ -47,7 +47,6 @@ public class UserEntity implements UserDetails {
     private boolean locked = true;
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     private Set<ArticleEntity> articles = new HashSet<>();
-
     @ManyToMany
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))

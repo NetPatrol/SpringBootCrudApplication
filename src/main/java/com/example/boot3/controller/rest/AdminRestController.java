@@ -18,7 +18,7 @@ import java.util.List;
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class AdminRestController {
 
-    UserServiceImpl userService;
+    private final UserServiceImpl userService;
     @Autowired
     public AdminRestController(UserServiceImpl userService) {
         this.userService = userService;

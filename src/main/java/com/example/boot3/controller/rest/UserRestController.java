@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class UserRestController {
 
-    UserServiceImpl userService;
+    private final UserServiceImpl userService;
     @Autowired
     public UserRestController(UserServiceImpl userService) {
         this.userService = userService;

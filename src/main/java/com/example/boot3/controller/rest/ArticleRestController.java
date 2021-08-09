@@ -3,7 +3,6 @@ package com.example.boot3.controller.rest;
 import com.example.boot3.entity.ArticleEntity;
 import com.example.boot3.model.Article;
 import com.example.boot3.service.article.ArticleService;
-import com.example.boot3.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -15,11 +14,10 @@ import org.springframework.web.bind.annotation.*;
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class ArticleRestController {
 
-    UserService userService;
+
     ArticleService articleService;
     @Autowired
-    public ArticleRestController(UserService userService, ArticleService articleService) {
-        this.userService = userService;
+    public ArticleRestController(ArticleService articleService) {
         this.articleService = articleService;
     }
 

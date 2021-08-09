@@ -13,7 +13,7 @@ import java.util.Set;
 @Transactional
 public class RoleServiceImpl implements RoleService{
 
-    RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
     @Autowired
     public RoleServiceImpl(RoleRepository roleRepository) {
         this.roleRepository = roleRepository;
