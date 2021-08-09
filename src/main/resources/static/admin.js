@@ -1,8 +1,10 @@
 const editButtons = document.querySelector('div#editButtons')
 const editModal = document.getElementById('editModal')
 const confirmModal = document.getElementById('confirmModal')
+const articleModal = document.getElementById('articleModal')
 const em = new mdb.Modal(editModal)
 const cm = new mdb.Modal(confirmModal)
+const am = new mdb.Modal(articleModal)
 /**
 * Table All User
 **/
@@ -29,7 +31,7 @@ const renderUserTable = (array) => {
                <td>
                <button
                id='eBtn'
-               type='edt'
+               type='button'
                class='btn btn-primary btn-sm'
                value='Edit'>
                edit</button></td>
@@ -61,6 +63,7 @@ const cityValueFormRegistrationInput = document.getElementById('create-city')
 const workplaceValueFormRegistrationInput = document.getElementById('create-workplace')
 const passwordValueFormRegistrationInput = document.getElementById('create-password')
 const confirmValueFormRegistrationInput = document.getElementById('create-confirm')
+const avatarValueFormRegistrationInput = document.getElementById('create-avatar')
 
 formRegistration.addEventListener('submit', e => {
     e.preventDefault()
@@ -73,18 +76,17 @@ formRegistration.addEventListener('submit', e => {
             "city": cityValueFormRegistrationInput.value,
             "workplace": workplaceValueFormRegistrationInput.value,
             "login": loginValueFormRegistrationInput.value,
+            "linkAvatar": avatarValueFormRegistrationInput.value,
             "password": passwordValueFormRegistrationInput.value,
             "confirmPassword": confirmValueFormRegistrationInput.value
         }
     addUser(url, data).then((res) => {
-
         if (res !== null) {
             getUsers(url).then();
             cm.show()
         } else {
             alert('ERROR')
         }
-
     })
     formRegistration.reset();
 })
@@ -110,9 +112,9 @@ const bodyEditModalInput = editModal.querySelectorAll('.modal-body input')
 const bodyEditModalSelect = editModal.querySelector('.modal-body select')
 document.querySelector('tbody#users').onclick = function (event) {
     if (event.target.tagName !== 'BUTTON') return  false
-    console.log(event.target)
     let data = [...event.target.parentNode.parentNode.children]
     let text = getDataEditFromButton(data)
+    console.log(text)
     bodyEditModalInput[0].value = text[0]
     bodyEditModalInput[1].value = text[1]
     bodyEditModalInput[2].value = text[2]
@@ -120,6 +122,7 @@ document.querySelector('tbody#users').onclick = function (event) {
     bodyEditModalInput[4].value = text[4]
     bodyEditModalInput[5].value = text[5]
     bodyEditModalInput[6].value = text[6]
+    bodyEditModalSelect.value = text[7]
     if (event.target.value === 'Delete') {
         document.getElementById('ifNeedHeaderForDeleteModal').style.display = 'flex'
         document.getElementById('ifNeedHeaderEditModal').style.display = 'none'
@@ -166,7 +169,6 @@ function getDataEditFromButton(data) {
 editButtons.onclick = function (ev) {
     ev.preventDefault()
     if (ev.target.tagName !== 'BUTTON') return false
-    console.log(ev.target.value)
     const url = '/users'
     let roleIndex = bodyEditModalSelect.options.selectedIndex
     let data =

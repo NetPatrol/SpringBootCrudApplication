@@ -1,18 +1,17 @@
 package com.example.boot3.entity;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
+import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "articles")
 public class ArticleEntity {
@@ -21,14 +20,20 @@ public class ArticleEntity {
     private Long id;
     @Column(name = "title")
     private String title;
+    @Lob
     @Column(name = "article")
     private String article;
     @Column(name = "date")
-    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(style = "M-")
-    private Date date;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
+    private String date;
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = UserEntity.class)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserEntity user;
 
+    public ArticleEntity(String title, String article, String date, UserEntity user) {
+        this.title = title;
+        this.article = article;
+        this.date = date;
+        this.user = user;
+    }
 }

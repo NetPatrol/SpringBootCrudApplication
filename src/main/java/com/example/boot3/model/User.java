@@ -4,17 +4,16 @@ import com.example.boot3.entity.UserEntity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
-public class User{
+public class User {
     private Long id;
     private String name;
     private String lastName;
-    private Date birthday;
+    private String birthday;
     private String city;
     private String workplace;
     private String linkAvatar;

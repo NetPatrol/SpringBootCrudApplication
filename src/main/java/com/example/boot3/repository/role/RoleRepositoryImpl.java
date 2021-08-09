@@ -16,6 +16,11 @@ public class RoleRepositoryImpl implements RoleRepository {
     }
 
     @Override
+    public void save(RoleEntity role) {
+        em.persist(em.contains(role) ? role : em.merge(role));
+    }
+
+    @Override
     public RoleEntity findById(Long id) {
         return em.createQuery("select r from RoleEntity r where r.id = :id", RoleEntity.class)
                 .setParameter("id", id)

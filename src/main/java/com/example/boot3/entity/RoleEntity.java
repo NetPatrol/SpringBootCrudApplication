@@ -1,6 +1,8 @@
 package com.example.boot3.entity;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
@@ -9,7 +11,6 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "roles")
 public class RoleEntity implements GrantedAuthority {
@@ -20,6 +21,11 @@ public class RoleEntity implements GrantedAuthority {
     private String role;
     @ManyToMany(mappedBy = "roles")
     private Set<UserEntity> users;
+
+    public RoleEntity(Long id, String role) {
+        this.id = id;
+        this.role = role;
+    }
 
     @Override
     public String getAuthority() {

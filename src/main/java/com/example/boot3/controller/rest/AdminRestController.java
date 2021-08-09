@@ -1,8 +1,6 @@
 package com.example.boot3.controller.rest;
 
-import com.example.boot3.entity.RoleEntity;
 import com.example.boot3.entity.UserEntity;
-import com.example.boot3.model.Role;
 import com.example.boot3.model.User;
 import com.example.boot3.service.user.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;

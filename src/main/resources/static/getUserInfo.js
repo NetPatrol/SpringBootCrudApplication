@@ -6,6 +6,7 @@ const userInfo = document.getElementById('user-info')
 const navBar = document.getElementById('navbar')
 const login = document.getElementById('data-account')
 const account = login.value
+console.log(account)
 const getUserByLogin = async function(login) {
     let navBarInfo = ""
     let uInfo = ""
@@ -19,7 +20,7 @@ const getUserByLogin = async function(login) {
                 <ul class="navbar-nav flex-row">
                 <li class="nav-item me-3 me-lg-1 text-white">
                 <a class="nav-link d-sm-flex align-items-sm-center" href="#">
-                <img src="${data.linkAvatar}" class="rounded-circle" height="22" alt="" loading="lazy"/>`
+                <img src="${data.linkAvatar}" class="rounded-pill" height="22" alt="" loading="lazy"/>`
             navBarInfo += `<span class="p-1">${getDataTime(data.name)}</span>`
             data.roles.forEach(r => {
                 if (r.role === 'ROLE_ADMIN') {
@@ -40,15 +41,15 @@ const getUserByLogin = async function(login) {
 
             uInfo +=
                `<div class="col-md-4" >
-                <img src = "${data.linkAvatar}" height = "190" alt = "" loading = "lazy" / >
+                <img src = "${data.linkAvatar}"  class="img-fluid rounded ripple" height="190" alt = "" loading = "lazy"/>
                 </div>
                 <div class="col-md-6">
                 <div class="card-body">
                 <h6 class="card-title">${data.name}  ${data.lastName}</h6>
                 <div class="mt-3">
-                <p>Date birthday: ${data.birthday}</p>
-                <p>City: ${data.city}</p>
-                <p>Workplace: ${data.workplace}</p>
+                <p>Дата рождения: ${data.birthday}</p>
+                <p>Город: ${data.city}</p>
+                <p>Место работы: ${data.workplace}</p>
                 </div>
                 </div>
                 </div>`
@@ -74,9 +75,9 @@ getUserByLogin(account).then()
 
 const getData = function () {
     let data = new Date()
-    const year = data.getFullYear()
-    const month = data.getMonth()
-    const day = data.getDay()
+    let year = data.getUTCFullYear()
+    let month = data.getUTCMonth()
+    let day = data.getUTCDate()
     let fMonth
 
     switch (month)
@@ -94,12 +95,13 @@ const getData = function () {
         case 10: fMonth="ноября"; break;
         case 11: fMonth="декабря"; break;
     }
-    return day +' '+ fMonth +' '+ year
+    return ' ' + day +' '+ fMonth +' '+ year
 }
 
 const getDataTime = function (name) {
     let data = new Date()
     const hour = data.getHours()
+    console.log(hour)
     if (hour > 4 && hour < 12) {
         return "Доброе утро, "+ name + ", сегодня " + getData()
     }
@@ -109,7 +111,50 @@ const getDataTime = function (name) {
     if (hour > 18 && hour < 23) {
         return "Добрый вечер, "+ name + ", сегодня " + getData()
     }
-    if (hour > 18 && hour < 23) {
+    if (hour > 0 && hour < 4) {
         return "Доброй ночи, "+ name + ", сегодня " + getData()
+    }
+}
+
+
+
+document.getElementById('add-article').onclick = function (event) {
+    am.show()
+}
+const articleButton = articleModal.querySelector('.modal button#addBtn')
+const bodyArticleModalInput = articleModal.querySelector('.modal-body input')
+const bodyArticleModalTextArea = articleModal.querySelector('.modal-body textarea')
+articleButton.onclick = function (ev) {
+    ev.preventDefault()
+    let articleData = new Date().toLocaleDateString()
+    const url = '/articles'
+    let uid = account
+    console.log(uid)
+    let data =
+        {
+            "title": bodyArticleModalInput.value,
+            "article": bodyArticleModalTextArea.value,
+            "date": articleData,
+            "user": uid
+        }
+    addArticle(url, data).then((res) => {
+        if (res !== null) {
+            getUserByLogin(uid).then()
+            am.hide()
+        }
+    })
+}
+
+const addArticle = async function (url, data) {
+    let response = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data),
+        credentials: "same-origin"
+    })
+    if (response.ok){
+        return await response.json();
     }
 }
