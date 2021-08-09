@@ -1,7 +1,8 @@
-const editButtons = document.querySelector('div#editButtons')
+const editButtons = document.getElementById('editButtons')
 const editModal = document.getElementById('editModal')
 const confirmModal = document.getElementById('confirmModal')
 const articleModal = document.getElementById('articleModal')
+
 const em = new mdb.Modal(editModal)
 const cm = new mdb.Modal(confirmModal)
 const am = new mdb.Modal(articleModal)
@@ -114,7 +115,6 @@ document.querySelector('tbody#users').onclick = function (event) {
     if (event.target.tagName !== 'BUTTON') return  false
     let data = [...event.target.parentNode.parentNode.children]
     let text = getDataEditFromButton(data)
-    console.log(text)
     bodyEditModalInput[0].value = text[0]
     bodyEditModalInput[1].value = text[1]
     bodyEditModalInput[2].value = text[2]

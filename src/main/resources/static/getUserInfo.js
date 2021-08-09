@@ -16,12 +16,12 @@ const getUserByLogin = async function(login) {
         .then(res => res.json())
         .then(data => {
             navBarInfo +=
-                `<a href='/logout' class='btn btn-primary btn-sm' role='button'>Sign out</a>
+                `<a href='/logout' class='btn btn-primary btn-sm' role='button'>Выйти</a>
                 <ul class="navbar-nav flex-row">
                 <li class="nav-item me-3 me-lg-1 text-white">
                 <a class="nav-link d-sm-flex align-items-sm-center" href="#">
                 <img src="${data.linkAvatar}" class="rounded-pill" height="22" alt="" loading="lazy"/>`
-            navBarInfo += `<span class="p-1">${getDataTime(data.name)}</span>`
+            navBarInfo += `<span class="p-1">${getTimesOfDayAndDate(data.name)}</span>`
             data.roles.forEach(r => {
                 if (r.role === 'ROLE_ADMIN') {
                     navBarInfo +=
@@ -73,13 +73,12 @@ const getUserByLogin = async function(login) {
 
 getUserByLogin(account).then()
 
-const getData = function () {
+const getDate = function () {
     let data = new Date()
     let year = data.getUTCFullYear()
     let month = data.getUTCMonth()
     let day = data.getUTCDate()
     let fMonth
-
     switch (month)
     {
         case 0: fMonth="января"; break;
@@ -98,27 +97,27 @@ const getData = function () {
     return ' ' + day +' '+ fMonth +' '+ year
 }
 
-const getDataTime = function (name) {
+const getTimesOfDayAndDate = function (name) {
     let data = new Date()
-    const hour = data.getHours()
-    console.log(hour)
-    if (hour > 4 && hour < 12) {
-        return "Доброе утро, "+ name + ", сегодня " + getData()
+    let hour = data.getHours()
+    if (hour >= 4 && hour < 12) {
+        return "Доброе утро, "+ name + ", сегодня " + getDate()
     }
-    if (hour > 12 && hour < 18) {
-        return "Добрый день, "+ name + ", сегодня " + getData()
+    if (hour >= 12 && hour < 18) {
+        return "Добрый день, "+ name + ", сегодня " + getDate()
     }
-    if (hour > 18 && hour < 23) {
-        return "Добрый вечер, "+ name + ", сегодня " + getData()
+    if (hour >= 18 && hour < 23) {
+        return "Добрый вечер, "+ name + ", сегодня " + getDate()
     }
-    if (hour > 0 && hour < 4) {
-        return "Доброй ночи, "+ name + ", сегодня " + getData()
+    if (hour >= 0 && hour < 4) {
+        return "Доброй ночи, "+ name + ", сегодня " + getDate()
     }
 }
 
 
 
-document.getElementById('add-article').onclick = function (event) {
+
+document.getElementById('add-article').onclick = function () {
     am.show()
 }
 const articleButton = articleModal.querySelector('.modal button#addBtn')
@@ -129,7 +128,6 @@ articleButton.onclick = function (ev) {
     let articleData = new Date().toLocaleDateString()
     const url = '/articles'
     let uid = account
-    console.log(uid)
     let data =
         {
             "title": bodyArticleModalInput.value,
