@@ -32,6 +32,7 @@ public class User {
         model.setWorkplace(entity.getWorkplace());
         model.setLinkAvatar(entity.getLinkAvatar());
         model.setLogin(entity.getLogin());
+        model.setLocked(entity.isAccountNonLocked());
         model.setRoles(entity.getRoles().stream().map(Role::toModel).collect(Collectors.toList()));
         model.setArticles(entity.getArticles().stream().map(Article::toModel).collect(Collectors.toList()));
         return model;

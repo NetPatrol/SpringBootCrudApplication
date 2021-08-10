@@ -1,3 +1,5 @@
+const articleModal = document.getElementById('articleModal')
+const am = new mdb.Modal(articleModal)
 /**
  * Account Data
  **/
@@ -6,7 +8,6 @@ const userInfo = document.getElementById('user-info')
 const navBar = document.getElementById('navbar')
 const login = document.getElementById('data-account')
 const account = login.value
-console.log(account)
 const getUserByLogin = async function(login) {
     let navBarInfo = ""
     let uInfo = ""

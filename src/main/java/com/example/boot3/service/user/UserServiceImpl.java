@@ -93,6 +93,7 @@ public class UserServiceImpl implements UserService{
                 u.setPassword(passwordEncoder(user.getPassword()));
             }
         }
+        u.setLocked(user.isAccountNonLocked());
         if (role != null && !role.equals("")) {
             if (role.equals("admin")) {
                u.setRoles(roleService.set(roleService.findById(1L)));

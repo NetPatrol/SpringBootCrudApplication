@@ -1,11 +1,8 @@
 const editButtons = document.getElementById('editButtons')
 const editModal = document.getElementById('editModal')
 const confirmModal = document.getElementById('confirmModal')
-const articleModal = document.getElementById('articleModal')
-
 const em = new mdb.Modal(editModal)
 const cm = new mdb.Modal(confirmModal)
-const am = new mdb.Modal(articleModal)
 /**
 * Table All User
 **/
@@ -23,20 +20,24 @@ const renderUserTable = (array) => {
                <td>${u.login}</td>`
         u.roles.forEach(r => {
             if (r.role === "ROLE_ADMIN") {
-                temp += `<td>admin</td>`
+                temp += `<td class="text-center">admin</td>`
             } else if (r.role === "ROLE_USER") {
-                temp += `<td>user</td>`
+                temp += `<td class="text-center">user</td>`
             }
         })
-        temp+=`<td>${u.locked}</td>
-               <td>
+        if (u.locked) {
+            temp+=`<td class="text-center">разрешен</td>`
+        } else if (!u.locked) {
+            temp+=`<td class="text-center">заблокирован</td>`
+        }
+        temp+=`<td class="text-center">
                <button
                id='eBtn'
                type='button'
                class='btn btn-primary btn-sm'
                value='Edit'>
                edit</button></td>
-               <td><button
+               <td class="text-center"><button
                id="dBtn" 
                type='button'
                class='btn btn-primary btn-sm'
@@ -110,7 +111,7 @@ const addUser = async function (url, data) {
  * Modal edit/delete form
  **/
 const bodyEditModalInput = editModal.querySelectorAll('.modal-body input')
-const bodyEditModalSelect = editModal.querySelector('.modal-body select')
+const bodyEditModalSelect = editModal.querySelectorAll('.modal-body select')
 document.querySelector('tbody#users').onclick = function (event) {
     if (event.target.tagName !== 'BUTTON') return  false
     let data = [...event.target.parentNode.parentNode.children]
@@ -122,7 +123,8 @@ document.querySelector('tbody#users').onclick = function (event) {
     bodyEditModalInput[4].value = text[4]
     bodyEditModalInput[5].value = text[5]
     bodyEditModalInput[6].value = text[6]
-    bodyEditModalSelect.value = text[7]
+    bodyEditModalSelect[0].value = text[8]
+    bodyEditModalSelect[1].value = text[7]
     if (event.target.value === 'Delete') {
         document.getElementById('ifNeedHeaderForDeleteModal').style.display = 'flex'
         document.getElementById('ifNeedHeaderEditModal').style.display = 'none'
@@ -134,12 +136,12 @@ document.querySelector('tbody#users').onclick = function (event) {
         document.getElementById('ifEditLogin').style.display = 'none'
         document.getElementById('ifEditPassword').style.display = 'none'
         document.getElementById('ifEditConfirmPassword').style.display = 'none'
+        document.getElementById('ifEditLocked').style.display = 'none'
         document.getElementById('ifEditRole').style.display = 'none'
         document.getElementById('ifNeedHrLine').style.display = 'none'
         document.getElementById('ifDeleteModal').style.display = 'block'
         document.getElementById('ifNeedDeleteButtonInModal').style.display = 'inline'
         document.getElementById('ifNeedEditButtonInModal').style.display = 'none'
-        document.getElementById('ifNeedClearButtonInModal').style.display = 'none'
     }
     if (event.target.value === 'Edit') {
         document.getElementById('ifNeedHeaderForDeleteModal').style.display = 'none'
@@ -154,10 +156,10 @@ document.querySelector('tbody#users').onclick = function (event) {
         document.getElementById('ifEditLogin').style.display = 'flex'
         document.getElementById('ifEditPassword').style.display = 'flex'
         document.getElementById('ifEditConfirmPassword').style.display = 'flex'
+        document.getElementById('ifEditLocked').style.display = 'flex'
         document.getElementById('ifEditRole').style.display = 'flex'
         document.getElementById('ifNeedDeleteButtonInModal').style.display = 'none'
         document.getElementById('ifNeedEditButtonInModal').style.display = 'inline'
-        document.getElementById('ifNeedClearButtonInModal').style.display = 'inline'
     }
     em.show()
 }
@@ -170,7 +172,15 @@ editButtons.onclick = function (ev) {
     ev.preventDefault()
     if (ev.target.tagName !== 'BUTTON') return false
     const url = '/users'
-    let roleIndex = bodyEditModalSelect.options.selectedIndex
+    let lockedIndex = bodyEditModalSelect[0].options.selectedIndex
+    let toggle = ""
+    if (lockedIndex === 1) {
+        toggle = true
+    } else if (lockedIndex === 2) {
+        toggle = false
+    }
+
+    let roleIndex = bodyEditModalSelect[1].options.selectedIndex
     let data =
             {
                 "id": bodyEditModalInput[0].value,
@@ -182,9 +192,10 @@ editButtons.onclick = function (ev) {
                 "login": bodyEditModalInput[6].value,
                 "password": bodyEditModalInput[7].value,
                 "confirmPassword": bodyEditModalInput[8].value,
+                "locked": toggle,
                 "roles": [{
                     "id": roleIndex,
-                    "role": bodyEditModalSelect.options[roleIndex].value
+                    "role": bodyEditModalSelect[1].options[roleIndex].value
                 }]
             }
     if (ev.target.value === 'Update') {

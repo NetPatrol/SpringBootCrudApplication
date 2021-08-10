@@ -10,7 +10,7 @@
 </head>
 <body class="bg-light">
 <nav class="navbar sticky-top navbar-dark bg-dark">
-  <input th:value="${login}" hidden id="data-account"/>
+  <input th:value="${account}" hidden id="data-account"/>
   <div id="navbar" class="container-fluid"></div>
 </nav>
 <div class="row mx-auto">
@@ -45,7 +45,7 @@
         </ul>
         <div class="tab-content" id="myTabContent0">
           <div class="tab-pane fade show active" id="home0" role="tabpanel" aria-labelledby="home-tab0">
-            <div class="mt-5">
+            <div class="col-md-10 mt-5">
               <table class="table table-sm table-hover">
                 <thead class="table-dark">
                 <tr>
@@ -56,10 +56,10 @@
                   <th>Город</th>
                   <th>Место работы</th>
                   <th>Логин</th>
-                  <th>Права доступа</th>
-                  <th>Блокировка</th>
-                  <th>Редактировать</th>
-                  <th>Удалить</th>
+                  <th class="text-center">Права доступа</th>
+                  <th class="text-center">Блокировка</th>
+                  <th class="text-center">Редактировать</th>
+                  <th class="text-center">Удалить</th>
                 </tr>
                 </thead>
                 <tbody id="users" data-users></tbody>
@@ -191,7 +191,7 @@
           </div>
           <div class="mb-3">
             <label for="message-text" class="col-form-label">Статья:</label>
-            <textarea class="form-control" id="message-text" placeholder="Напишите что-нибудь интересное"></textarea>
+            <textarea class="form-control" rows="10" id="message-text" placeholder="Напишите что-нибудь интересное"></textarea>
           </div>
         </form>
       </div>
@@ -303,10 +303,21 @@
             </div>
           </div>
 
+          <div id="ifEditLocked" class="form-group row mt-3">
+            <label class="col-sm-4 col-form-label" for="locked">Блокировка:</label>
+            <div class="col-sm-8">
+              <select id="locked" name="locked" class="form-select">
+                <option selected></option>
+                <option value="разрешен">зазрешить</option>
+                <option value="заблокирован">заблокировать</option>
+              </select>
+            </div>
+          </div>
+
           <div id="ifEditRole" class="form-group row mt-3">
             <label class="col-sm-4 col-form-label" for="role">Права доступа:</label>
             <div class="col-sm-8">
-              <select id="role" name="role" class="form-select" aria-label="Default select example">
+              <select id="role" name="role" class="form-select">
                 <option selected></option>
                 <option value="admin">admin</option>
                 <option value="user">user</option>
@@ -316,8 +327,7 @@
         </form>
       </div>
       <div id="editButtons" class="modal-footer">
-        <button type="button" class="btn btn-primary" data-mdb-dismiss="modal">Close</button>
-        <button id="ifNeedClearButtonInModal" style="display: none" type="reset" class="btn btn-primary" form="edit">Очистить</button>
+        <button type="button" class="btn btn-primary" data-mdb-dismiss="modal">Закрыть</button>
         <button id="ifNeedEditButtonInModal" style="display: none" type="submit" class="btn btn-primary"  value="Update">Применить</button>
         <button id="ifNeedDeleteButtonInModal" style="display: none" type="submit" class="btn btn-primary" value="Delete">Удалить</button>
       </div>
