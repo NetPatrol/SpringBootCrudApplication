@@ -1,5 +1,5 @@
-const exampleModal = document.getElementById('exampleModal');
-exampleModal.addEventListener('show.mdb.modal', function (event) {
+const editModal = document.getElementById('editModal');
+editModal.addEventListener('show.mdb.modal', function (event) {
 
     const button = event.relatedTarget;
 
@@ -8,13 +8,14 @@ exampleModal.addEventListener('show.mdb.modal', function (event) {
     const userLast = button.getAttribute('data-mdb-userLast');
     const userAge = button.getAttribute('data-mdb-userAge');
     const userLogin = button.getAttribute('data-mdb-userLogin');
+    console.log(userId, userName)
 
-    const modalTitle = exampleModal.querySelector('.modal-title');
-    const modalBodyInputId = exampleModal.querySelector('[data-id]');
-    const modalBodyInputName = exampleModal.querySelector('[data-name]');
-    const modalBodyInputLast = exampleModal.querySelector('[data-last]');
-    const modalBodyInputAge = exampleModal.querySelector('[data-age]');
-    const modalBodyInputLogin = exampleModal.querySelector('[data-login]');
+    const modalTitle = editModal.querySelector('.modal-title');
+    const modalBodyInputId = editModal.querySelector('[data-id]');
+    const modalBodyInputName = editModal.querySelector('[data-name]');
+    const modalBodyInputLast = editModal.querySelector('[data-last]');
+    const modalBodyInputAge = editModal.querySelector('[data-age]');
+    const modalBodyInputLogin = editModal.querySelector('[data-login]');
 
     modalTitle.textContent = 'Edit profile from ' + userLast + ' ' + userName
     modalBodyInputId.value = userId

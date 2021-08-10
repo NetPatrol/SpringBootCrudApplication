@@ -11,17 +11,17 @@
 <body class="bg-light">
 <nav class="navbar sticky-top navbar-dark bg-dark">
     <div class="container-fluid">
-        <a th:if="${login} != null" th:href="@{/logout}" th:text="${'Sign out'}" class="btn btn-primary btn-sm m" role="button"></a>
+        <a th:href="@{/logout}" th:text="${'Sign out'}" class="btn btn-primary btn-sm m" role="button"></a>
         <ul class="navbar-nav flex-row">
             <strong class="d-none d-sm-block ms-1" th:each="role: ${account.roles}" th:switch="${role.role}">
             <li th:case="'ROLE_ADMIN'" class="nav-item me-3 me-lg-1 text-white">
-                <a class="nav-link d-sm-flex align-items-sm-center" th:href="@{'/user/{login}'(login=${login})}">
+                <a class="nav-link d-sm-flex align-items-sm-center" th:href="@{'/user/{login}'(login=${account.login})}">
                     <span class="p-1" th:text="${account.name +' status: administrator'}"></span>
                     <span class="p-1" th:text="${#calendars.format(#calendars.createNow(), 'dd MMM yyyy HH:mm')}"></span>
                 </a>
             </li>
             <li th:case="'ROLE_USER'" class="nav-item me-3 me-lg-1 text-white">
-                <a class="nav-link d-sm-flex align-items-sm-center" th:href="@{'/user/{login}'(login=${login})}">
+                <a class="nav-link d-sm-flex align-items-sm-center" th:href="@{'/user/{login}'(login=${account.login})}">
                     <span class="p-1" th:text="${account.name}"></span>
                     <span class="p-1" th:text="${#calendars.format(#calendars.createNow(), 'dd MMM yyyy HH:mm')}"></span>
                 </a>
@@ -51,7 +51,8 @@
             <td th:text="${user.age}">Age</td>
             <td th:text="${user.login}">Login</td>
             <td class="text-center">
-                <a th:if="${role.role} == 'ROLE_ADMIN'" th:href="@{/admin}" class="btn btn-primary btn-sm">admin panel</a>
+                <a th:if="${role.role} == 'ROLE_ADMIN'" th:href="@{'/admin/{login}'(login=${account.login})}"
+                   class="btn btn-primary btn-sm">admin panel</a>
                 <span th:if="${role.role} == 'ROLE_USER'">USER</span>
             </td>
         </tr>

@@ -24,24 +24,28 @@ public class UserController {
         this.userService = userService;
     }
 
-    private String login;
-
     @GetMapping("/")
-    public String getHomePage(Model model) {
-        List<String> messages = new ArrayList<>();
-        messages.add("Hello!");
-        messages.add("Welcome to Application");
-        messages.add("to continue working, you need to register");
-        model.addAttribute("messages", messages);
-        model.addAttribute("user", new User());
-        return "index";
+    public String getHomePage(Principal principal, Model model) {
+        if (principal != null) {
+            model.addAttribute("account",
+                    userService.findByLogin(principal.getName()));
+            return "redirect:user/" + principal.getName();
+        } else {
+            List<String> messages = new ArrayList<>();
+            messages.add("Hello!");
+            messages.add("Welcome to Application");
+            messages.add("to continue working, you need to register");
+            model.addAttribute("messages", messages);
+            model.addAttribute("user", new User());
+            return "index";
+        }
     }
 
     @Secured("ROLE_ADMIN")
-    @GetMapping("/admin")
-    public String adminPage(Principal principal, ModelMap modelMap, Model model) {
-        this.login = principal.getName();
-        model.addAttribute("login", login);
+    @GetMapping("/admin/{login}")
+    public String adminPage(@PathVariable String login,
+                            ModelMap modelMap,
+                            Model model) {
         model.addAttribute("user", new User());
         modelMap.addAttribute("users", userService.findAll());
         model.addAttribute("account", userService.findByLogin(login));
@@ -50,19 +54,20 @@ public class UserController {
 
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
     @GetMapping("/user/{login}")
-    public String userPageById(@PathVariable("login") String log, Principal principal, Model model) {
-        this.login = principal.getName();
-        model.addAttribute("login", login);
-        model.addAttribute("user", userService.findByLogin(log));
-        model.addAttribute("account", userService.findByLogin(login));
+    public String userPageById(@PathVariable("login") String login,
+                               Principal principal,
+                               Model model) {
+        model.addAttribute("user", userService.findByLogin(login));
+        model.addAttribute("account", userService.findByLogin(principal.getName()));
         return "user";
     }
 
     @RequestMapping(value = "registration", method = RequestMethod.POST)
-    public String registration(Principal principal, @ModelAttribute User user) {
+    public String registration(@ModelAttribute User user,
+                               Principal principal) {
         userService.save(user);
         if (principal != null) {
-            return "redirect:/admin";
+            return "redirect:/admin/" + principal.getName();
         } else {
             return "redirect:/";
         }
@@ -71,15 +76,17 @@ public class UserController {
     @Secured("ROLE_ADMIN")
     @PostMapping("edit")
     public String edit(@ModelAttribute("user") User user,
-                       @RequestParam String role) {
+                       @RequestParam String role,
+                       Principal principal) {
         userService.edit(user, role);
-        return "redirect:/admin";
+        return "redirect:/admin/" + principal.getName();
     }
 
     @Secured("ROLE_ADMIN")
     @PostMapping("delete")
-    public String delete(@ModelAttribute("user") User user) {
+    public String delete(@ModelAttribute("user") User user,
+                         Principal principal) {
         userService.delete(user);
-        return "redirect:/admin";
+        return "redirect:/admin/" + principal.getName();
     }
 }
