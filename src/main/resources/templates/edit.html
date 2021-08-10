@@ -7,21 +7,13 @@
 </head>
 <body class="bg-light">
 <div>
-  <a th:href="@{/logout}" th:text="${'Sign out'}"></a>
-  <ul>
-    <li>
-      <a th:href="@{'/admin/{login}'(login = ${account.login})}">
-        <strong th:each="r: ${account.roles}">
-          <span th:text="${account.name + ' ' + r.role}"></span>
-        </strong>
-      </a>
-    </li>
-  </ul>
-</div>
-<div>
-  <h1>Edit user profile</h1>
-</div>
-<div>
+  <table>
+    <td><a th:href="@{/logout}" th:text="${'Sign out'}"></a></td>
+    <td><a th:href="@{/registration}">REGISTRATION</a></td>
+  </table>
+  <strong th:each="r: ${account.roles}">
+    <h3 th:text="${account.name + ' ' + account.lastName + '   ' + r.role}"></h3>
+  </strong>
   <form method="POST" th:action="@{'{id}'(id=${user.id})}" th:id="edit">
     <div>
       <label for="id">Id:</label>
@@ -81,9 +73,7 @@
           <option th:value="${'user'}">user</option>
         </select>
       </div>
-    </div>
 
-    <div>
       <table>
         <tr>
           <td>
@@ -95,6 +85,7 @@
         </tr>
       </table>
     </div>
+
   </form>
 </div>
 </body>

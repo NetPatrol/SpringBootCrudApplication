@@ -9,12 +9,9 @@
 <div>
   <table>
     <td><a th:href="@{/logout}" th:text="${'Sign out'}"></a></td>
-    <td></td>
     <td><a th:href="@{/registration}">REGISTRATION</a></td>
   </table>
-</div>
 
-<div>
   <strong th:each="r: ${account.roles}">
     <h3 th:text="${account.name + ' ' + account.lastName + '   ' + r.role}"></h3>
   </strong>
@@ -42,48 +39,47 @@
     </tr>
     </tbody>
   </table>
-</div>
-<div>
+
   <p></p>
-</div>
-<div>
+
   <table>
     <thead>
-      <tr>
-        <th>Id</th>
-        <th>Name</th>
-        <th>Last name</th>
-        <th>Age</th>
-        <th>Login</th>
-        <th>User page</th>
-        <th>Roles</th>
-        <th>Edit</th>
-        <th>Delete</th>
-      </tr>
+    <tr>
+      <th>Id</th>
+      <th>Name</th>
+      <th>Last name</th>
+      <th>Age</th>
+      <th>Login</th>
+      <th>User page</th>
+      <th>Roles</th>
+      <th>Edit</th>
+      <th>Delete</th>
+    </tr>
     </thead>
     <tbody>
-      <tr th:each="u : ${users}">
-        <td th:text="${u.id}"></td>
-        <td th:text="${u.name}"></td>
-        <td th:text="${u.lastName}"></td>
-        <td th:text="${u.age}"></td>
-        <td th:text="${u.login}"></td>
-        <td><a th:href="@{'user/{login}'(login=${u.login})}">user page</a></td>
-        <td th:each="role : ${u.roles}" th:switch="${role.role}">
-          <span th:case="'ROLE_ADMIN'">ADMIN</span>
-          <span th:case="'ROLE_USER'">USER</span>
-        </td>
-        <td>
-          <a th:href="@{'/edit/{id}'(id=${u.id})}">EDIT</a>
-        </td>
-        <td>
-          <form method="POST" th:action="@{'/delete?id={id}'(id = ${u.id})}" th:object="${user}">
-            <button type="submit">DELETE</button>
-          </form>
-        </td>
-      </tr>
+    <tr th:each="u : ${users}">
+      <td th:text="${u.id}"></td>
+      <td th:text="${u.name}"></td>
+      <td th:text="${u.lastName}"></td>
+      <td th:text="${u.age}"></td>
+      <td th:text="${u.login}"></td>
+      <td><a th:href="@{'user/{login}'(login=${u.login})}">user page</a></td>
+      <td th:each="role : ${u.roles}" th:switch="${role.role}">
+        <span th:case="'ROLE_ADMIN'">ADMIN</span>
+        <span th:case="'ROLE_USER'">USER</span>
+      </td>
+      <td>
+        <a th:href="@{'/edit/{id}'(id=${u.id})}">EDIT</a>
+      </td>
+      <td>
+        <form method="POST" th:action="@{'/delete?id={id}'(id = ${u.id})}" th:object="${user}">
+          <button type="submit">DELETE</button>
+        </form>
+      </td>
+    </tr>
     </tbody>
   </table>
 </div>
+
 </body>
 </html>
