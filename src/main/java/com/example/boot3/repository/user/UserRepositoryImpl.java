@@ -18,7 +18,7 @@ public class UserRepositoryImpl implements UserRepository{
 
     @Override
     public void save(User user) {
-        em.persist(user);
+        em.persist(em.contains(user) ? user : em.merge(user));
     }
 
     @Override
@@ -39,11 +39,6 @@ public class UserRepositoryImpl implements UserRepository{
         return em.createQuery("select u from User u join fetch u.roles where u.login = :login", User.class)
                 .setParameter("login", login)
                 .getSingleResult();
-    }
-
-    @Override
-    public void edit(User user) {
-        em.persist(em.contains(user) ? user : em.merge(user));
     }
 
     @Override

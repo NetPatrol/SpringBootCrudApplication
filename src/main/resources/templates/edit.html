@@ -3,99 +3,94 @@
 <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
 <head>
   <meta charset="utf-8">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet"/>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.css" rel="stylesheet"/>
-  <title></title>
+  <title th:text="${account.login}"></title>
 </head>
 <body class="bg-light">
-<nav class="navbar sticky-top navbar-dark bg-dark">
-  <div class="container-fluid">
-    <a th:if="${login} == null" th:href="@{/login}" th:text="${'Sign in'}" class="btn btn-primary btn-sm m" role="button"></a>
-    <a th:if="${login} != null" th:href="@{/logout}" th:text="${'Sign out'}" class="btn btn-primary btn-sm m" role="button"></a>
-    <ul class="navbar-nav flex-row">
-      <li th:if="${login} != null" class="nav-item me-3 me-lg-1 text-white">
-        <a class="nav-link d-sm-flex align-items-sm-center" href="#">
-          <img src="https://mdbootstrap.com/img/new/avatars/1.jpg" class="rounded-circle" height="22" alt="" loading="lazy"/>
-          <strong class="d-none d-sm-block ms-1" th:each="role: ${account.roles}" th:switch="${role.role}">
-            <span class="p-1" th:case="'ROLE_ADMIN'" th:text="${account.name +' status: administrator'}"></span>
-            <span class="p-1" th:case="'ROLE_USER'" th:text="${account.name}"></span>
-            <span class="p-1" th:case="''" th:text="${'Welcome, Unknown! You are not authorized'}"></span>
-            <span class="p-1" th:text="${#calendars.format(#calendars.createNow(), 'dd MMM yyyy HH:mm')}"></span>
-          </strong>
-        </a>
-      </li>
-    </ul>
-  </div>
-</nav>
-<div class="col-md-4 offset-md-4 my-5">
-  <h1 class="display-6">Edit user profile</h1>
+<div>
+  <a th:href="@{/logout}" th:text="${'Sign out'}"></a>
+  <ul>
+    <li>
+      <a th:href="@{'/admin/{login}'(login = ${account.login})}">
+        <strong th:each="r: ${account.roles}">
+          <span th:text="${account.name + ' ' + r.role}"></span>
+        </strong>
+      </a>
+    </li>
+  </ul>
 </div>
-<div class="col-md-4 offset-4">
-  <form action="#" method="POST" th:action="@{'{id}'(id=${user.id})}" th:id="edit">
-    <div class="form-group row" hidden>
-      <label class="col-sm-4 col-form-label" for="id">Id:</label>
-      <div class="col-sm-8">
-        <input class="form-control" id="id" type="text" placeholder="Disabled input"
-               aria-label="disabled input example"
-               disabled th:field="*{user.id}">
+<div>
+  <h1>Edit user profile</h1>
+</div>
+<div>
+  <form method="POST" th:action="@{'{id}'(id=${user.id})}" th:id="edit">
+    <div>
+      <label for="id">Id:</label>
+      <div>
+        <input id="id" type="text" placeholder="Disabled input" th:field="*{user.id}">
       </div>
     </div>
 
     <div class="form-group row">
-      <label class="col-sm-4 col-form-label" for="name">Name:</label>
-      <div class="col-sm-8">
-        <input class="form-control" id="name" type="text" th:field="*{user.name}">
+      <label for="name">Name:</label>
+      <div>
+        <input id="name" type="text" th:field="*{user.name}">
       </div>
     </div>
 
-    <div class="form-group row">
-      <label class="col-sm-4 col-form-label" for="last">Last name:</label>
-      <div class="col-sm-8">
-        <input class="form-control" id="last" type="text" th:field="*{user.lastName}">
+    <div>
+      <label for="last">Last name:</label>
+      <div>
+        <input id="last" type="text" th:field="*{user.lastName}">
       </div>
     </div>
 
-    <div class="form-group row">
-      <label class="col-sm-4 col-form-label" for="login">Login:</label>
-      <div class="col-sm-8">
-        <input type="email" class="form-control" id="login" th:field="*{user.login}">
+    <div>
+      <label for="age">Age:</label>
+      <div>
+        <input type="number" id="age" th:field="*{user.age}">
       </div>
     </div>
 
-    <div class="form-group row">
-      <label class="col-sm-4 col-form-label" for="password">Password:</label>
+    <div>
+      <label for="login">Login:</label>
       <div class="col-sm-8">
-        <input type="password" class="form-control" id="password" th:field="*{user.password}">
+        <input type="email" id="login" th:field="*{user.login}">
       </div>
     </div>
 
-    <div class="form-group row">
-      <label class="col-sm-4 col-form-label" for="confirm">Confirm password:</label>
-      <div class="col-sm-8">
+    <div>
+      <label for="password">Password:</label>
+      <div>
+        <input type="password" id="password" th:field="*{user.password}">
+      </div>
+    </div>
+
+    <div>
+      <label for="confirm">Confirm password:</label>
+      <div>
         <input type="password" class="form-control" id="confirm" th:field="*{user.confirmPassword}">
       </div>
     </div>
 
-    <div class="form-group row">
-      <label class="col-sm-4 col-form-label" for="role">Role:</label>
-      <div class="col-sm-8">
-        <select id="role" name="role" class="form-select" aria-label="Default select example">
+    <div>
+      <label for="role">Role:</label>
+      <div>
+        <select th:each="role:${user.roles}" id="role" name="role" aria-label="Default select example">
           <option selected></option>
-          <option value="user">user</option>
-          <option value="admin">admin</option>
+          <option th:value="${'admin'}">admin</option>
+          <option th:value="${'user'}">user</option>
         </select>
       </div>
     </div>
 
-    <div class="modal-footer mt-5">
+    <div>
       <table>
         <tr>
-          <td class="p-3">
-            <button type="reset" class="btn btn-primary" th:form="edit">Clean</button>
+          <td>
+            <button type="reset" th:form="edit">Clean</button>
           </td>
           <td>
-            <button type="submit" class="btn btn-primary" th:form="edit">Update</button>
+            <button type="submit" th:form="edit">Update</button>
           </td>
         </tr>
       </table>

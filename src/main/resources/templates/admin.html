@@ -3,219 +3,87 @@
 <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
 <head>
   <meta charset="utf-8">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet"/>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.css" rel="stylesheet"/>
-  <title>Administrator</title>
+  <title th:text="${account.login}"></title>
 </head>
-<body class="bg-light">
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.js"></script>
-<nav class="navbar sticky-top navbar-dark bg-dark">
-  <div class="container-fluid">
-    <a th:if="${login} == null" th:href="@{/login}" th:text="${'Sign in'}" class="btn btn-primary btn-sm m" role="button"></a>
-    <a th:if="${login} != null" th:href="@{/logout}" th:text="${'Sign out'}" class="btn btn-primary btn-sm m" role="button"></a>
-    <ul class="navbar-nav flex-row">
-      <li th:if="${login} != null" class="nav-item me-3 me-lg-1 text-white">
-        <a class="nav-link d-sm-flex align-items-sm-center" href="#">
-          <img src="https://mdbootstrap.com/img/new/avatars/1.jpg" class="rounded-circle" height="22" alt="" loading="lazy"/>
-          <strong class="d-none d-sm-block ms-1" th:each="r: ${account.roles}" th:switch="${r.role}">
-            <span class="p-1" th:case="'ROLE_ADMIN'" th:text="${account.name +' status: administrator'}"></span>
-            <span class="p-1" th:case="'ROLE_USER'" th:text="${account.name}"></span>
-            <span class="p-1" th:case="''" th:text="${'Welcome, Unknown! You are not authorized'}"></span>
-            <span class="p-1" th:text="${#calendars.format(#calendars.createNow(), 'dd MMM yyyy HH:mm')}"></span>
-          </strong>
-        </a>
-      </li>
-    </ul>
-  </div>
-</nav>
-<div class="row mx-auto">
-  <div class="col-2">
-    <div class="nav flex-column nav-tabs text-center" id="v-tabs-tab" role="tablist" aria-orientation="vertical">
-      <a class="nav-link active" id="v-tabs-home-tab" data-mdb-toggle="tab" href="#v-tabs-home" role="tab" aria-controls="v-tabs-home" aria-selected="true">
-        Admin panel
-      </a>
-      <a class="nav-link" id="v-tabs-admin-panel-tab" data-mdb-toggle="tab" href="#v-tabs-admin-panel" role="tab" aria-controls="v-tabs-admin-panel" aria-selected="false">
-        My profile
-      </a>
-    </div>
-  </div>
-  <div class="col-10">
-    <div class="tab-content" id="v-tabs-tabContent">
-      <div class="tab-pane fade show active" id="v-tabs-home" role="tabpanel" aria-labelledby="v-tabs-home-tab">
-        <div class="col-md-12">
-          <h1 class="display-6 mt-3">Administration panel</h1>
-          <ul class="nav nav-tabs mb-3" id="myTab0" role="tablist">
-            <li class="nav-item" role="presentation">
-              <button class="nav-link active" id="home-tab0" data-mdb-toggle="tab" data-mdb-target="#home0" type="button" role="tab" aria-controls="home" aria-selected="true">
-                Accounts table
-              </button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button class="nav-link" id="profile-tab0" data-mdb-toggle="tab" data-mdb-target="#profile0" type="button" role="tab" aria-controls="profile" aria-selected="false">
-                Add new user
-              </button>
-            </li>
-          </ul>
-          <div class="tab-content" id="myTabContent0">
-            <div class="tab-pane fade show active" id="home0" role="tabpanel" aria-labelledby="home-tab0">
-              <div class="mt-5">
-                <table class="table table-sm table-hover">
-                  <thead class="table-dark">
-                    <tr>
-                      <th hidden>Id</th>
-                      <th>Name</th>
-                      <th>Last name</th>
-                      <th>Login</th>
-                      <th>Authorities</th>
-                      <th>Expired</th>
-                      <th class="text-center">Locked</th>
-                      <th class="text-center">Credentials</th>
-                      <th class="text-center">Enabled</th>
-                      <th class="text-center">Edit</th>
-                      <th class="text-center">Delete</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr th:each="u : ${users}">
-                      <td th:text="${u.id}" hidden></td>
-                      <td th:text="${u.name}"></td>
-                      <td th:text="${u.lastName}"></td>
-                      <td th:text="${u.login}"></td>
-                      <td class="text-center" th:each="role : ${u.roles}" th:switch="${role.role}">
-                        <span th:case="'ROLE_ADMIN'"><i class="fas fa-user-cog"></i></span>
-                        <span th:case="'ROLE_USER'"><i class="fas fa-user-tie"></i></span>
-                      </td>
-                      <td th:text="${u.expired}">Last name</td>
-                      <td class="text-center" th:switch="${u.locked}">
-                        <span th:case="true"><i class="fas fa-unlock-alt"></i></span>
-                        <span th:case="false"><i class="fas fa-user-lock"></i></span>
-                      </td>
-                      <td class="text-center" th:switch="${u.credentials}">
-                        <span th:case="true"><i class="fas fa-toggle-on"></i></span>
-                        <span th:case="false"><i class="fas fa-toggle-off"></i></span>
-                      </td>
-                      <td class="text-center" th:switch="${u.enabled}">
-                        <span th:case="true"><i class="far fa-check-circle"></i></span>
-                        <span th:case="false"><i class="fas fa-ban"></i></span></td>
-                      <td class="text-center">
-                        <a th:href="@{'/edit/{id}'(id=${u.id})}"><i class="far fa-edit"></i></a>
-                      </td>
-                      <td class="text-center">
-                        <form method="POST" th:action="@{'/delete?id={id}'(id = ${u.id})}" th:object="${user}">
-                          <button class="btn btn-primary btn-sm"><i class="fa fa-trash-alt"></i></button>
-                        </form>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            <div class="tab-pane fade" id="profile0" role="tabpanel" aria-labelledby="profile-tab0">
-              <div class="col-md-4 offset-md-4 my-5">
-                <h1 class="display-6">Create new profile</h1>
-              </div>
-              <div class="col-md-4 offset-md-4">
-                <form th:method="POST" th:action="@{registration}" th:id="registration">
-                  <div class="form-group row">
-                    <label class="col-sm-4 col-form-label" for="name">Name: </label>
-                    <div class="col-sm-8">
-                      <input class="form-control" id="name" type="text" th:field="*{user.name}">
-                    </div>
-                  </div>
+<body>
+<div>
+  <table>
+    <td><a th:href="@{/logout}" th:text="${'Sign out'}"></a></td>
+    <td></td>
+    <td><a th:href="@{/registration}">REGISTRATION</a></td>
+  </table>
+</div>
 
-                  <div class="form-group row">
-                    <label class="col-sm-4 col-form-label" for="last">Last name:</label>
-                    <div class="col-sm-8">
-                      <input class="form-control" id="last" type="text" th:field="*{user.lastName}">
-                    </div>
-                  </div>
-
-                  <div class="form-group row">
-                    <label class="col-sm-4 col-form-label" for="login">Login:</label>
-                    <div class="col-sm-8">
-                      <input type="email" class="form-control" id="login" th:field="*{user.login}">
-                    </div>
-                  </div>
-
-                  <div class="form-group row">
-                    <label class="col-sm-4 col-form-label" for="password">Password:</label>
-                    <div class="col-sm-8">
-                      <input type="password" class="form-control" id="password" th:field="*{user.password}">
-                    </div>
-                  </div>
-
-                  <div class="form-group row">
-                    <label class="col-sm-4 col-form-label" for="confirm">Confirm password:</label>
-                    <div class="col-sm-8">
-                      <input type="password" class="form-control" id="confirm" th:field="*{user.confirmPassword}">
-                    </div>
-                  </div>
-                  <div class="modal-footer mt-5">
-                    <table>
-                      <tr>
-                        <td class="p-3">
-                          <button type="reset" class="btn btn-primary" th:form="registration">Clean</button>
-                        </td>
-                        <td>
-                          <button class="btn btn-primary" type="submit" th:form="registration">Registration</button>
-                        </td>
-                      </tr>
-                    </table>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="tab-pane fade" id="v-tabs-admin-panel" role="tabpanel" aria-labelledby="v-tabs-admin-panel-tab">
-        <div class="col-md-8 offset-md-2 mt-5">
-          <h1 class="display-6" th:text="${account.name} + ' ' + ${account.lastName}"></h1>
-          <table class="table table-sm table-hover">
-            <thead class="table-dark">
-              <tr>
-                <th hidden>Id</th>
-                <th>Name</th>
-                <th>Last name</th>
-                <th>Login</th>
-                <th>Authorities</th>
-                <th>Expired</th>
-                <th class="text-center">Locked</th>
-                <th class="text-center">Credentials</th>
-                <th class="text-center">Enabled</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td th:text="${account.id}" hidden></td>
-                <td th:text="${account.name}"></td>
-                <td th:text="${account.lastName}"></td>
-                <td th:text="${account.login}"></td>
-                <td class="text-center" th:each="role : ${account.roles}" th:switch="${role.role}">
-                  <span th:case="'ROLE_ADMIN'"><i class="fas fa-user-cog"></i></span>
-                  <span th:case="'ROLE_USER'"><i class="fas fa-user-tie"></i></span>
-                </td>
-                <td th:text="${account.expired}"></td>
-                <td class="text-center" th:switch="${account.locked}">
-                  <span th:case="true"><i class="fas fa-unlock-alt"></i></span>
-                  <span th:case="false"><i class="fas fa-user-lock"></i></span>
-                </td>
-                <td class="text-center" th:switch="${account.credentials}">
-                  <span th:case="true"><i class="fas fa-toggle-on"></i></span>
-                  <span th:case="false"><i class="fas fa-toggle-off"></i></span>
-                </td>
-                <td class="text-center" th:switch="${account.enabled}">
-                  <span th:case="true"><i class="far fa-check-circle"></i></span>
-                  <span th:case="false"><i class="fas fa-ban"></i></span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
+<div>
+  <strong th:each="r: ${account.roles}">
+    <h3 th:text="${account.name + ' ' + account.lastName + '   ' + r.role}"></h3>
+  </strong>
+  <table>
+    <thead>
+    <tr>
+      <th>Id</th>
+      <th>Name</th>
+      <th>Last name</th>
+      <th>Age</th>
+      <th>Login</th>
+      <th>Roles</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td th:text="${account.id}"></td>
+      <td th:text="${account.name}"></td>
+      <td th:text="${account.lastName}"></td>
+      <td th:text="${account.age}"></td>
+      <td th:text="${account.login}"></td>
+      <td th:each="role : ${account.roles}">
+        <span th:if="${role.role} == 'ROLE_ADMIN'">ADMIN</span>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<div>
+  <p></p>
+</div>
+<div>
+  <table>
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Last name</th>
+        <th>Age</th>
+        <th>Login</th>
+        <th>User page</th>
+        <th>Roles</th>
+        <th>Edit</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="u : ${users}">
+        <td th:text="${u.id}"></td>
+        <td th:text="${u.name}"></td>
+        <td th:text="${u.lastName}"></td>
+        <td th:text="${u.age}"></td>
+        <td th:text="${u.login}"></td>
+        <td><a th:href="@{'user/{login}'(login=${u.login})}">user page</a></td>
+        <td th:each="role : ${u.roles}" th:switch="${role.role}">
+          <span th:case="'ROLE_ADMIN'">ADMIN</span>
+          <span th:case="'ROLE_USER'">USER</span>
+        </td>
+        <td>
+          <a th:href="@{'/edit/{id}'(id=${u.id})}">EDIT</a>
+        </td>
+        <td>
+          <form method="POST" th:action="@{'/delete?id={id}'(id = ${u.id})}" th:object="${user}">
+            <button type="submit">DELETE</button>
+          </form>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 </body>
 </html>

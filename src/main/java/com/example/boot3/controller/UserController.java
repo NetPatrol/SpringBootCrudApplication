@@ -22,54 +22,63 @@ public class UserController {
         this.userService = userService;
     }
 
-    private String login;
-
     @GetMapping("/")
-    public String getHomePage(Model model) {
-        if (login != null) {
-            model.addAttribute("login", login);
-            model.addAttribute("account", userService.findByLogin(login));
+    public String getHomePage(Principal principal, Model model) {
+        if (principal != null) {
+            model.addAttribute("account", userService.findByLogin(principal.getName()));
+            return userPage(principal.getName(), principal, model);
         }
         return "index";
     }
+
     @Secured("ROLE_ADMIN")
     @GetMapping("/admin")
-    public String adminPage(Principal principal, ModelMap modelMap, Model model) {
-        this.login = principal.getName();
-        model.addAttribute("login", login);
+    public String adminPage(Principal principal,
+                            ModelMap modelMap,
+                            Model model) {
         model.addAttribute("user", new User());
         modelMap.addAttribute("users", userService.findAll());
-        model.addAttribute("account", userService.findByLogin(login));
+        model.addAttribute("account", userService.findByLogin(principal.getName()));
         return "admin";
     }
-    @Secured("ROLE_USER")
-    @GetMapping("/user")
-    public String userPage(Principal principal, Model model) {
-        this.login = principal.getName();
-        model.addAttribute("login", login);
-        model.addAttribute("account", userService.findByLogin(login));
+
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
+    @GetMapping("/user/{login}")
+    public String userPage(@PathVariable("login") String login,
+                           Principal principal,
+                           Model model) {
+        model.addAttribute("user", userService.findByLogin(login));
+        model.addAttribute("account", userService.findByLogin(principal.getName()));
         return "user";
+    }
+
+    @Secured("ROLE_ADMIN")
+    @GetMapping("registration")
+    public String registration(Principal principal, Model model) {
+        model.addAttribute("user", new User());
+        model.addAttribute("account", userService.findByLogin(principal.getName()));
+        return "registration";
     }
 
     @Secured("ROLE_ADMIN")
     @RequestMapping(value = "registration", method = RequestMethod.POST)
     public String registration(@ModelAttribute User user) {
         userService.save(user);
-        return "redirect:/admin";
+        return "redirect:admin";
     }
 
     @Secured("ROLE_ADMIN")
     @GetMapping("/edit/{id}")
-    public String editPage(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("login", login);
+    public String editPage(@PathVariable("id") Long id, Principal principal, Model model) {
         model.addAttribute("user", userService.findById(id));
-        model.addAttribute("account", userService.findByLogin(login));
+        model.addAttribute("account", userService.findByLogin(principal.getName()));
         return "edit";
     }
 
     @Secured("ROLE_ADMIN")
-    @RequestMapping(value = "edit/{id}", method = RequestMethod.POST)
-    public String edit(@ModelAttribute User user, @RequestParam String role) {
+    @RequestMapping (value = "edit/{id}", method = RequestMethod.POST)
+    public String edit(@ModelAttribute User user,
+                       @RequestParam String role) {
         userService.edit(user, role);
         return "redirect:/admin";
     }
