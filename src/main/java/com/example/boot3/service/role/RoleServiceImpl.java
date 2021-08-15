@@ -5,9 +5,11 @@ import com.example.boot3.repository.role.RoleRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
+
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -22,6 +24,11 @@ public class RoleServiceImpl implements RoleService{
 
     public void save(Role role) {
         roleRepository.save(role);
+    }
+
+    @Override
+    public List<Role> findAll() {
+        return roleRepository.findAll();
     }
 
     @Override

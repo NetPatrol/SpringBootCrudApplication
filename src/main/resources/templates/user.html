@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="ru_RU">
-<meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
 <head>
-    <meta charset="utf-8">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet"/>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.css" rel="stylesheet"/>
-    <title></title>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.0.2/css/bootstrap.min.css} "/>
+    <title>User</title>
 </head>
 <body class="bg-light">
 <nav class="navbar sticky-top navbar-dark bg-dark">
@@ -30,34 +28,52 @@
         </ul>
     </div>
 </nav>
-<div class="col-md-6 offset-md-3 mt-5">
-    <h1 class="display-6" th:text="${user.name} + ' ' + ${user.lastName}"></h1>
-    <table class="table table-sm table-hover" th:each="role: ${user.roles}">
-        <thead class="table-dark">
-        <tr>
-            <th>Id</th>
-            <th>First name</th>
-            <th>Last name</th>
-            <th>Age</th>
-            <th>Login</th>
-            <th class="text-center">Roles</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td th:text="${user.id}">User ID</td>
-            <td th:text="${user.name}">Name</td>
-            <td th:text="${user.lastName}">Last name</td>
-            <td th:text="${user.age}">Age</td>
-            <td th:text="${user.login}">Login</td>
-            <td class="text-center">
-                <a th:if="${role.role} == 'ROLE_ADMIN'" th:href="@{'/admin/{login}'(login=${account.login})}"
-                   class="btn btn-primary btn-sm">admin panel</a>
-                <span th:if="${role.role} == 'ROLE_USER'">USER</span>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+<div class="row mx-auto">
+    <div class="col-2 mt-3">
+        <div class="d-flex align-items-start">
+            <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <a class="nav-link active" id="v-pills-home-panel-tab" data-bs-toggle="pill" href="#v-pills-home-panel" role="tab" aria-controls="v-pills-home-panel" aria-selected="false">
+                    User
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-10">
+        <div class="tab-content" id="v-pills-tabContent">
+            <div class="col-md-6 offset-md-3 mt-5">
+                <h1 class="display-6" th:text="${user.name} + ' ' + ${user.lastName}"></h1>
+                <table class="table table-sm table-hover" th:each="role: ${user.roles}">
+                    <thead class="table-dark">
+                    <tr>
+                        <th>Id</th>
+                        <th>First name</th>
+                        <th>Last name</th>
+                        <th>Age</th>
+                        <th>Login</th>
+                        <th class="text-center">Roles</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td th:text="${user.id}">User ID</td>
+                        <td th:text="${user.name}">Name</td>
+                        <td th:text="${user.lastName}">Last name</td>
+                        <td th:text="${user.age}">Age</td>
+                        <td th:text="${user.login}">Login</td>
+                        <td class="text-center">
+                            <a th:if="${role.role} == 'ROLE_ADMIN'" th:href="@{'/admin/{login}'(login=${account.login})}"
+                               class="btn btn-primary btn-sm">admin panel</a>
+                            <span th:if="${role.role} == 'ROLE_USER'">USER</span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
+<script th:src="@{/webjars/jquery/3.1.1/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/2.9.2/umd/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/5.0.2/js/bootstrap.min.js}"></script>
 </body>
 </html>
