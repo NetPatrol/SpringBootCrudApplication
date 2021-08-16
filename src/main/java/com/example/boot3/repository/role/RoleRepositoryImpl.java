@@ -18,7 +18,7 @@ public class RoleRepositoryImpl implements RoleRepository {
 
     @Override
     public void save(Role role) {
-        em.persist(role);
+        em.persist(em.merge(role));
     }
 
     @Override

@@ -29,10 +29,11 @@ public class DataBaseInitializer {
 
     @PostConstruct
     public void doInit() {
-        if (userService.findAll().isEmpty() && roleService.findAll().isEmpty()) {
+        if (roleService.findAll().isEmpty()) {
             roleService.save(new Role(1L, "ROLE_ADMIN"));
             roleService.save(new Role(2L, "ROLE_USER"));
-
+        }
+        if (userService.findAll().isEmpty()) {
             Set<Role> roles = new HashSet<>();
             roles.add(roleService.findById(1L));
 
