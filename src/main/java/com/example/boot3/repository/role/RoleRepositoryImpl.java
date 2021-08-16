@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import java.util.List;
 
 @Repository
 public class RoleRepositoryImpl implements RoleRepository {
@@ -17,7 +18,13 @@ public class RoleRepositoryImpl implements RoleRepository {
 
     @Override
     public void save(Role role) {
-        em.persist(em.contains(role) ? role : em.merge(role));
+        em.persist(em.merge(role));
+    }
+
+    @Override
+    public List<Role> findAll() {
+        return em.createQuery("select r from Role r", Role.class)
+                .getResultList();
     }
 
     @Override

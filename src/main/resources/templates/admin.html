@@ -72,7 +72,7 @@
         <a th:href="@{'/edit/{id}'(id=${u.id})}">EDIT</a>
       </td>
       <td>
-        <form method="POST" th:action="@{'/delete?id={id}'(id = ${u.id})}" th:object="${user}">
+        <form th:method=DELETE th:action="@{'del?id={id}'(id=${u.id})}">
           <button type="submit">DELETE</button>
         </form>
       </td>

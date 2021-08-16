@@ -30,13 +30,15 @@ public class DataBaseInitializer {
 
     @PostConstruct
     public void doInit() {
-        roleService.save(new Role(1L, "ROLE_ADMIN"));
-        roleService.save(new Role(2L, "ROLE_USER"));
-
-        Set<Role> roles = new HashSet<>();
-        roles.add(roleService.findById(1L));
+        if (roleService.findAll().isEmpty()) {
+            roleService.save(new Role(1L, "ROLE_ADMIN"));
+            roleService.save(new Role(2L, "ROLE_USER"));
+        }
 
         if (userService.findAll().isEmpty()) {
+            Set<Role> roles = new HashSet<>();
+            roles.add(roleService.findById(1L));
+
             admin.setRoles(roles);
             userService.save(admin);
             userService.save(user);

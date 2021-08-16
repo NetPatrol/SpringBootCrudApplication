@@ -14,11 +14,11 @@
   <strong th:each="r: ${account.roles}">
     <h3 th:text="${account.name + ' ' + account.lastName + '   ' + r.role}"></h3>
   </strong>
-  <form method="POST" th:action="@{'{id}'(id=${user.id})}" th:id="edit">
+  <form th:method="PUT" th:action="@{''}" th:id="edit">
     <div>
       <label for="id">Id:</label>
       <div>
-        <input id="id" type="text" placeholder="Disabled input" th:field="*{user.id}">
+        <input id="id" type="text" th:readonly="true" th:field="*{user.id}">
       </div>
     </div>
 
@@ -85,7 +85,6 @@
         </tr>
       </table>
     </div>
-
   </form>
 </div>
 </body>

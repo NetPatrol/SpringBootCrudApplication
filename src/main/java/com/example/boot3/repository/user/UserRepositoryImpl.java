@@ -18,7 +18,7 @@ public class UserRepositoryImpl implements UserRepository{
 
     @Override
     public void save(User user) {
-        em.persist(em.contains(user) ? user : em.merge(user));
+        em.persist(user);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class UserRepositoryImpl implements UserRepository{
 
     @Override
     public void delete(User user) {
-        em.remove(em.contains(user) ? user : em.merge(user));
+        em.remove(user);
     }
 
 }
